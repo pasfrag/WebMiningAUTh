@@ -5,6 +5,6 @@ def create_mongo_collection(col_name, dict):
 
     db = client["web_mining"]
 
-    colection = db[col_name]
+    collection = db[col_name]
 
-    colection.insert_one(dict)
+    collection.insert_one(dict)
