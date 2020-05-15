@@ -1,10 +1,21 @@
 from pymongo import MongoClient
 
-def create_mongo_collection(col_name, dict):
-    client = MongoClient("mongodb://localhost:27017/")
+class MongoHandler(object):
+    client = None
+    db = None
 
-    db = client["web_mining"]
+    def __init__(self):
+        self.client = MongoClient("mongodb://localhost:27017/")
+        self.db = self.client["web_mining"]
 
-    collection = db[col_name]
+    def store_to_collection(self, dictionary, col_name):
+        collection = self.db[col_name]
+        collection.insert_one(dictionary)
 
-    collection.insert_one(dict)
+    def retrieve_from_collection(self, col_name):
+        collection = self.db[col_name]
+        return collection.find()
+
+    def get_with_id(self, col_name, dict_wit_id):
+        collection = self.db[col_name]
+        return collection.find(dict_wit_id)
