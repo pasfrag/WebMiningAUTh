@@ -127,6 +127,96 @@ en_stopwords = [
     ]
 ]
 
+keywords = [
+    'greta',
+    'thunberg',
+    'warming',
+    'climate',
+    'environment'
+    'ecology',
+    'Alarmist',
+    'Animals',
+    'Green',
+    'energy',
+    'Snowing',
+    'Storm',
+    'Weather',
+    'Fossil',
+    'fuels',
+    'Coal',
+    'CO2',
+    'Greenpeace',
+    'Climate',
+    'realist',
+    'Renewable',
+    'Catastrophe',
+    'Oil',
+    'Wind',
+    'Solar',
+    'Energy',
+    'Ozone',
+    'depletion',
+    'ClimateChange',
+    'GlobalWarming',
+    'ClimateCult',
+    'ClimateBrawl',
+    'ClimateReality',
+    'unesco',
+    'nature',
+    'ecology',
+    'animals',
+    'desertification',
+    'toxic',
+    'pollution',
+    'pollutant',
+    'pollute',
+    'chemical',
+    'deforestation',
+    'reusable',
+    'reuse'
+]
+
+non_deniers = [
+    '@GretaThunberg',
+    '@LeoDiCaprio',
+    '@Peters_Glen',
+    '@CO2_earth',
+    '@guardianeco',
+    '@AssaadRazzouk',
+    '@350',
+    '@UNFCCC',
+    '@ClimateCentral',
+    '@BLUEdotRegister',
+    '@ClimateReality',
+    '@CC_Yale',
+    '@dana1981',
+    '@grist',
+    '@richardabetts',
+    '@insideclimate',
+    '@GeorgeMonbiot',
+    '@RichardMcLellan',
+    '@GreenPeaceWPG'
+]
+
+deniers = [
+    '@thegwpfcom',
+    '@ClimateDepot',
+    '@EcoSenseNow',
+    '@Electroversenet',
+    '@JunkScience',
+    '@tan123',
+    '@ClimateHiJinx',
+    '@NJSnowFan',
+    '@wattsupwiththat',
+    '@Carbongate',
+    '@ClimateRealists',
+    '@SpaceWeather101',
+    '@SeibtNaomi',
+    '@ccdeditor',
+    '@ClimateNewsCA',
+    '@WeiZhangAtmos'
+]
+
 
 # Emojis emotions
 joy_emojis = ['😀', '😂 ', '😃', '', '😄', '😇', '😉', '😊',
