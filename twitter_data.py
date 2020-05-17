@@ -6,7 +6,15 @@ from tweepy import API, OAuthHandler, Cursor, TweepError
 from mongo import MongoHandler
 from preprocessing_functions import preprocess_text
 from secret_keys import consumer_key, consumer_secret, access_token, access_token_secret
+import textblob
+from textblob import TextBlob
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from langdetect import detect
 
+
+def sentiment_analyzer_scores(sentence):
+    score = SentimentIntensityAnalyzer().polarity_scores(sentence)
+    return score
 
 class TweetMiner(object):
 
@@ -48,6 +56,7 @@ class TweetMiner(object):
         print("--------------------------------")
         print(f"Number of not found: {count0}")
 
+
     def preprocess_tweet(self, tweet):
         tweet_dict = dict()
         tweet_dict["_id"] = tweet["_id"]
@@ -79,6 +88,7 @@ class TweetMiner(object):
         self.connection.store_to_collection(tweet_dict, "twitter_new")
         return tweet_dict
 
+
     def get_new_tweets(self):
         count = 0
         for tweet in Cursor(self.api.search, q="@#ClimateChange", lang="en", tweet_mode="extended").items():
@@ -90,17 +100,35 @@ class TweetMiner(object):
 
     def get_user_tweets(self):
         re_list = []
-        for i in range(1, 5):
-            statuses = self.api.user_timeline(screen_name="GretaThunberg", count=50, page=i, lang="en", tweet_mode="extended")
+        # for user in lexicons.deniers:
+        # for user in lexicons.non_deniers:
+        for i in range(1, 10):
+            statuses = self.api.user_timeline(screen_name="LeoDiCaprio", count=50, page=i, lang="en", tweet_mode="extended")
             for status in statuses:
-                if any(keyword in status.full_text for keyword in lexicons.keywords) and not status.full_text.startswith("RT @"):
+                if any(keyword in status.full_text for keyword in lexicons.keywords) \
+                        and len(status.full_text.split()) >= 5 \
+                        and detect(status.full_text) == 'en':
+                        # and not status.full_text.startswith("RT @"):
                     status_dict = dict()
                     status_dict["_id"] = status.id
                     status_dict["user_name"] = status.author.screen_name
                     status_dict["location"] = status.author.location
                     status_dict["description"] = preprocess_text(status.author.description)
                     status_dict['date'] = f"{status.created_at.year}-{status.created_at.month}-{status.created_at.day}"
-                    status_dict["text"] = preprocess_text(re.sub(r'^RT\s@\w+:', r'', status.full_text))
+                    clean_text = preprocess_text(re.sub(r'^RT\s@\w+:', r'', status.full_text))
+                    status_dict["text"] = clean_text
+
+                    status_dict["sentiment"] = round(sentiment_analyzer_scores(status.full_text)['compound'], 3)
+
+                    subj = TextBlob(''.join(status.full_text)).sentiment
+                    status_dict["subjectivity"] = round(subj[1],3)
+
+                    status_dict["label"] = 0 # non - denier
+                    # status_dict["label"] = 1 # denier
+
                     self.connection.store_to_collection(status_dict, "twitter_profiles")
+                # elif detect(status.full_text) != 'en':
+                #     print(status.full_text)
             re_list.append(statuses)
         return re_list
+
