@@ -1,34 +1,43 @@
 import pandas as pd
-from lexicons import joy_emojis, anger_emojis, sad_emojis, surprise_emojis, fear_emojis, disgust_emojis
-from preprocessing_functions import preprocess_text
-from sklearn.feature_extraction.text import TfidfVectorizer
+from SentimentAnalysis.Supervised.feature_extraction import vectorize_test_dataframe, vectorize_train_dataframe, preprocces_dataframe
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.naive_bayes import MultinomialNB, GaussianNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, f1_score, hamming_loss
+from sklearn.preprocessing import MultiLabelBinarizer
 
-def dummy_tokenizer(doc):
-    return doc
+# Read the dataset
+data = pd.read_csv("2018-11 emotions-classification-train.txt", sep="\t")
 
-text = ["today", "is", "a", "great", "😀", "😀"]
+# Preprocces the dataset
+emotions = preprocces_dataframe(data)
 
-tfidf = TfidfVectorizer(
-    analyzer='word',
-    tokenizer=dummy_tokenizer,
-    preprocessor=dummy_tokenizer,
-    token_pattern=None)
+# Split the dataset to train and validation set (for test set we will use the loaded tweets)
+train_dataset, val_dataset = train_test_split(emotions, test_size=0.4, train_size=0.6)
 
-emotions = pd.read_csv("2018-11 emotions-classification-train.txt", sep="\t")
-selected_emotions = emotions.drop(['anticipation', 'love', 'optimism', 'pessimism', 'trust'], axis=1)
+# Vectorize tweet text
+train_emotions = vectorize_train_dataframe(train_dataset)
+val_emotions = vectorize_test_dataframe(val_dataset)
 
-selected_emotions['Tweet'] = selected_emotions['Tweet'].apply(lambda x: preprocess_text(x))
-print(selected_emotions['Tweet'])
-selected_emotions['PreprocessedTweet'] = selected_emotions['Tweet'].apply(lambda x: extract_emojis_semantic(x))
-selected_emotions["JoyEmojis"] = selected_emotions['Tweet'].apply(lambda x: find_number_of_emojis(x, joy_emojis))
-selected_emotions["SadEmojis"] = selected_emotions['Tweet'].apply(lambda x: find_number_of_emojis(x, sad_emojis))
-selected_emotions["DisgustEmojis"] = selected_emotions['Tweet'].apply(
-    lambda x: find_number_of_emojis(x, disgust_emojis))
-selected_emotions["SurpriseEmojis"] = selected_emotions['Tweet'].apply(
-    lambda x: find_number_of_emojis(x, surprise_emojis))
-selected_emotions["FearEmojis"] = selected_emotions['Tweet'].apply(lambda x: find_number_of_emojis(x, fear_emojis))
-selected_emotions["AngerEmojis"] = selected_emotions['Tweet'].apply(lambda x: find_number_of_emojis(x, anger_emojis))
+# Define feature columns
+X_train = train_emotions.iloc[:,6:]
+X_val = val_emotions.iloc[:, 6:]
+# Define target labels
+y_train = train_emotions.iloc[:, :6]
+y_val = val_emotions.iloc[:, :6]
 
-selected_emotions["tfidf"] = tfidf.fit_transform(selected_emotions['PreprocessedTweet'])
+# Create and train multinomiaL naive bayes classifier
+nb = OneVsRestClassifier(GaussianNB())
+# Create and train logistic regression
+# lrg = OneVsRestClassifier(LogisticRegression(solver='lbfgs'))
+# Create and train multinomiaL naive bayes classifier
+decision_tree = DecisionTreeClassifier()
+decision_tree.fit(X_train, y_train)
+y_pred = decision_tree.predict(X_val)
 
-
+# Calculate accuracy and f1
+print("Accuracy is", accuracy_score(y_val, y_pred))
+print("F1 score for each clas: ", f1_score(y_val, y_pred, average=None))
+print("Hamming loss is: ", hamming_loss(y_val, y_pred))
