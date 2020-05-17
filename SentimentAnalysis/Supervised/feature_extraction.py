@@ -32,7 +32,7 @@ def vectorize_train_dataframe(df):
     df2.reset_index(drop=True, inplace=True)
     df_concat = pd.concat([df, df2], axis=1)
     # Select only the columns we need
-    df = df_concat.drop(['ID','Tweet', 'PreprocessedTweet','anticipation','love','optimism','pessimism','trust'], axis=1)
+    df = df_concat.drop(['ID','Tweet', 'PreprocessedTweet'], axis=1)
     return df
 
 
@@ -44,6 +44,6 @@ def vectorize_test_dataframe(df):
     df2.reset_index(drop=True, inplace=True)
     df_concat = pd.concat([df, df2], axis=1)
     # Select only the columns we need
-    df = df_concat.drop(['ID', 'Tweet', 'PreprocessedTweet', 'anticipation', 'love', 'optimism', 'pessimism', 'trust'],
+    df = df_concat.drop(['ID', 'Tweet', 'PreprocessedTweet'],
                         axis=1)
     return df

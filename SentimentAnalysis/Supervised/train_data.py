@@ -28,7 +28,7 @@ X_val = val_emotions.iloc[:, 6:]
 y_train = train_emotions.iloc[:, :6]
 y_val = val_emotions.iloc[:, :6]
 
-# Create and train multinomiaL naive bayes classifier
+# Create and train multinomiaL nb classifier
 nb = OneVsRestClassifier(GaussianNB())
 # Create and train logistic regression
 # lrg = OneVsRestClassifier(LogisticRegression(solver='lbfgs'))

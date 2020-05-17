@@ -3,10 +3,10 @@ from nltk import TweetTokenizer, WordNetLemmatizer, pos_tag
 from nltk.corpus import wordnet
 from lexicons import contractions, punctuations, en_stopwords
 
-def preprocess_text(unclean_text):
+def preprocess_text(tweet_text):
     tweet_tokenizer = TweetTokenizer()
 
-    tokens = [token.lower().lstrip("@").lstrip("#") for token in tweet_tokenizer.tokenize(unclean_text)]
+    tokens = [token.lower().lstrip("@").lstrip("#") for token in tweet_tokenizer.tokenize(tweet_text)]
     tokens_no_contra = [contractions[token].split() if token in contractions else [token] for token in tokens]
     flat_list = [item for sublist in tokens_no_contra for item in sublist]
     tokens_semi_final = [token for token in flat_list if token not in punctuations and token not in en_stopwords]
@@ -24,14 +24,6 @@ def preprocess_text(unclean_text):
             text.append(wnl.lemmatize(word.lower()))
 
     return text
-
-def get_hashtags(text):
-    tweet_tokenizer = TweetTokenizer()
-    return [token for token in tweet_tokenizer.tokenize(text) if re.match("^#(\w+)", token)]
-
-def get_mentions(text):
-    tweet_tokenizer = TweetTokenizer()
-    return [token for token in tweet_tokenizer.tokenize(text) if re.match("^@(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$", token)]
 
 def nltk_tag_to_wordnet_tag(nltk_tag):
     if nltk_tag.startswith('J'):
