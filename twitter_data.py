@@ -1,5 +1,7 @@
 import datetime
 import time
+import re
+import lexicons
 from tweepy import API, OAuthHandler, Cursor, TweepError
 from mongo import MongoHandler
 from preprocessing_functions import preprocess_text
@@ -86,18 +88,19 @@ class TweetMiner(object):
         print("--------------------------------")
         print(f"Number of found: {count}")
 
-    # Getting the data
-# i = 0
-# for tweet in Cursor(api.search, q="@", lang="en", tweet_mode="extended").items(): #q="#ClimateChange"
-#     # tweet._json["_id"] = tweet._json.pop("id")
-#     #
-#     # tweet_dict = dict()
-#     #
-#     # print(tweet._json)
-#     # mongo.create_mongo_collection("twitter", tweet._json)
-#     json_str = json.dumps(tweet._json)
-#     parsed = json.loads(json_str)
-#     print(json.dumps(parsed, indent=4, sort_keys=True))
-#     i += 1
-#     if i > 50:
-#         break
+    def get_user_tweets(self):
+        re_list = []
+        for i in range(1, 5):
+            statuses = self.api.user_timeline(screen_name="GretaThunberg", count=50, page=i, lang="en", tweet_mode="extended")
+            for status in statuses:
+                if any(keyword in status.full_text for keyword in lexicons.keywords) and not status.full_text.startswith("RT @"):
+                    status_dict = dict()
+                    status_dict["_id"] = status.id
+                    status_dict["user_name"] = status.author.screen_name
+                    status_dict["location"] = status.author.location
+                    status_dict["description"] = preprocess_text(status.author.description)
+                    status_dict['date'] = f"{status.created_at.year}-{status.created_at.month}-{status.created_at.day}"
+                    status_dict["text"] = preprocess_text(re.sub(r'^RT\s@\w+:', r'', status.full_text))
+                    self.connection.store_to_collection(status_dict, "twitter_profiles")
+            re_list.append(statuses)
+        return re_list

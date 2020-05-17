@@ -173,7 +173,8 @@ keywords = [
     'chemical',
     'deforestation',
     'reusable',
-    'reuse'
+    'reuse',
+    'climatecrisis'
 ]
 
 non_deniers = [
