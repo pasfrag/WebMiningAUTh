@@ -3,6 +3,7 @@ from nltk import TweetTokenizer, WordNetLemmatizer, pos_tag
 from nltk.corpus import wordnet
 from lexicons import contractions, punctuations, en_stopwords
 
+
 def preprocess_text(tweet_text):
     tweet_tokenizer = TweetTokenizer()
 
@@ -24,6 +25,7 @@ def preprocess_text(tweet_text):
             text.append(wnl.lemmatize(word.lower()))
 
     return text
+
 
 def nltk_tag_to_wordnet_tag(nltk_tag):
     if nltk_tag.startswith('J'):

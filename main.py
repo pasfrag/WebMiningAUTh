@@ -1,5 +1,5 @@
 from twitter_data import TweetMiner
-from insta_data import InstaMiner
+# from insta_data import InstaMiner
 from mongo import MongoHandler
 
 t_miner = TweetMiner()
@@ -12,3 +12,8 @@ t_miner = TweetMiner()
 # i_miner.preprocess_posts()
 
 user = t_miner.get_user_tweets()
+
+
+
+
+

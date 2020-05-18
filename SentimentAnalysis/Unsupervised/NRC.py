@@ -13,7 +13,6 @@ word_emotions = emolex_df.iloc[:, 0].tolist()
 tweets = connection.retrieve_from_collection("twitter_new")
 
 for tweet in tweets:
-    emotion = []
     anger = anticipation = disgust = fear = joy = negative = positive = sadness = surprise = trust = 0
     for word in tweet['text']:
         if word in word_emotions:

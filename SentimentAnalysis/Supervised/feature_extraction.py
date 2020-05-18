@@ -6,7 +6,6 @@ from lexicons import joy_emojis, anger_emojis, sad_emojis, surprise_emojis, fear
 from preprocessing_functions import preprocess_text
 
 
-
 def preprocces_dataframe(df):
     # Preprocces tweets to match with our global preproccesing
     df['Tweet'] = df['Tweet'].apply(lambda x: preprocess_text(x))
