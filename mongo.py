@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 
+
 class MongoHandler(object):
     client = None
     db = None

@@ -1,6 +1,9 @@
 import datetime
 import time
 import re
+
+import pymongo
+
 import lexicons
 from tweepy import API, OAuthHandler, Cursor, TweepError
 from mongo import MongoHandler
@@ -101,34 +104,36 @@ class TweetMiner(object):
     def get_user_tweets(self):
         re_list = []
         # for user in lexicons.deniers:
-        # for user in lexicons.non_deniers:
-        for i in range(1, 10):
-            statuses = self.api.user_timeline(screen_name="LeoDiCaprio", count=50, page=i, lang="en", tweet_mode="extended")
-            for status in statuses:
-                if any(keyword in status.full_text for keyword in lexicons.keywords) \
-                        and len(status.full_text.split()) >= 5 \
-                        and detect(status.full_text) == 'en':
-                        # and not status.full_text.startswith("RT @"):
-                    status_dict = dict()
-                    status_dict["_id"] = status.id
-                    status_dict["user_name"] = status.author.screen_name
-                    status_dict["location"] = status.author.location
-                    status_dict["description"] = preprocess_text(status.author.description)
-                    status_dict['date'] = f"{status.created_at.year}-{status.created_at.month}-{status.created_at.day}"
-                    clean_text = preprocess_text(re.sub(r'^RT\s@\w+:', r'', status.full_text))
-                    status_dict["text"] = clean_text
+        for user in lexicons.non_deniers:
+            for i in range(1, 10):  # starting with 1-10
+                statuses = self.api.user_timeline(screen_name=user, count=50, page=i, lang="en", tweet_mode="extended")
+                for status in statuses:
+                    if any(keyword in status.full_text for keyword in lexicons.keywords) \
+                            and len(status.full_text.split()) >= 5 \
+                            and detect(status.full_text) == 'en':
+                            # and not status.full_text.startswith("RT @"):
+                        status_dict = dict()
+                        status_dict["_id"] = status.id
+                        status_dict["user_name"] = status.author.screen_name
+                        status_dict["location"] = status.author.location
+                        status_dict["description"] = preprocess_text(status.author.description)
+                        status_dict['date'] = f"{status.created_at.year}-{status.created_at.month}-{status.created_at.day}"
+                        clean_text = preprocess_text(re.sub(r'^RT\s@\w+:', r'', status.full_text))
+                        status_dict["text"] = clean_text
 
-                    status_dict["sentiment"] = round(sentiment_analyzer_scores(status.full_text)['compound'], 3)
+                        status_dict["sentiment"] = round(sentiment_analyzer_scores(status.full_text)['compound'], 3)
 
-                    subj = TextBlob(''.join(status.full_text)).sentiment
-                    status_dict["subjectivity"] = round(subj[1],3)
+                        subj = TextBlob(''.join(status.full_text)).sentiment
+                        status_dict["subjectivity"] = round(subj[1],3)
 
-                    status_dict["label"] = 0 # non - denier
-                    # status_dict["label"] = 1 # denier
-
-                    self.connection.store_to_collection(status_dict, "twitter_profiles")
-                # elif detect(status.full_text) != 'en':
-                #     print(status.full_text)
-            re_list.append(statuses)
+                        status_dict["label"] = 0 # non - denier
+                        # status_dict["label"] = 1 # denier
+                        try:
+                            self.connection.store_to_collection(status_dict, "twitter_profiles")
+                        except pymongo.errors.DuplicateKeyError:
+                            print(status.id)
+                            print("\n")
+                            continue
+                re_list.append(statuses)
         return re_list
 
