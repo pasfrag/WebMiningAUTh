@@ -20,3 +20,10 @@ class MongoHandler(object):
     def get_with_id(self, col_name, dict_wit_id):
         collection = self.db[col_name]
         return collection.find(dict_wit_id)
+
+    def delete_with_name(self,col_name, name):
+        collection = self.db[col_name]
+        query = {"user_name": name}
+        x = collection.delete_many(query)
+        print(x.deleted_count, " documents deleted.")
+

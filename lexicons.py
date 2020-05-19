@@ -174,7 +174,9 @@ keywords = [
     'deforestation',
     'reusable',
     'reuse',
-    'climatecrisis'
+    'climatecrisis',
+    'environmentalism',
+    'environmentalist'
 ]
 
 non_deniers = [
@@ -215,9 +217,47 @@ deniers = [
     'SeibtNaomi',
     'ccdeditor',
     'ClimateNewsCA',
-    'WeiZhangAtmos'
+    'WeiZhangAtmos',
+    'IceAgeFarmer',
+    'ILuvCO2'
 ]
 
+new_profiles = [
+    'greenpeaceusa',
+    'RnfrstAlliance',
+    'realDonaldTrump',
+    'BillGates',
+    'elonmusk',
+    'BarackObama',
+    'tedcruz',
+    'KTHopkins',
+    'GrizzlyGovFan',
+    'MikeHarwell66',
+    'RealCandaceO',
+    'algore',
+    'reenasharma38',
+    'GrandSolarMin',
+    'grand_solar',
+    'peikko763',
+    'LpdlcRamirez',
+    'adapt2030',
+    'shipwayjs',
+    'ezralevant',
+    'FriendsOScience',
+    'JustinTrudeau',
+    'MSNBC',
+    'washingtonpost',
+    'TheEconomist',
+    'Clarity_Enviro',
+    'GWPnews',
+    'angelabaggetta'
+]
+
+# #globalwarminghoax
+new_profiles2 = [
+    'tyrathetaurus',
+    'goodfoodgal'
+]
 
 # Emojis emotions
 joy_emojis = ['😀', '😂 ', '😃', '', '😄', '😇', '😉', '😊',

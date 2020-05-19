@@ -104,9 +104,13 @@ class TweetMiner(object):
     def get_user_tweets(self):
         re_list = []
         # for user in lexicons.deniers:
-        for user in lexicons.non_deniers:
-            for i in range(1, 10):  # starting with 1-10
-                statuses = self.api.user_timeline(screen_name=user, count=50, page=i, lang="en", tweet_mode="extended")
+        # for user in lexicons.non_deniers:
+        for user in lexicons.new_profiles2:
+            count_tweets = 0
+            for i in range(1, 20):  # starting with 1-10 # 1-50 for new profiles
+                statuses = self.api.user_timeline(screen_name=user,
+                                                  count=50, page=i, lang="en",
+                                                  tweet_mode="extended") # = user !!!
                 for status in statuses:
                     if any(keyword in status.full_text for keyword in lexicons.keywords) \
                             and len(status.full_text.split()) >= 5 \
@@ -126,14 +130,16 @@ class TweetMiner(object):
                         subj = TextBlob(''.join(status.full_text)).sentiment
                         status_dict["subjectivity"] = round(subj[1],3)
 
-                        status_dict["label"] = 0 # non - denier
+                        # status_dict["label"] = 0 # non - denier
                         # status_dict["label"] = 1 # denier
                         try:
-                            self.connection.store_to_collection(status_dict, "twitter_profiles")
+                            self.connection.store_to_collection(status_dict, "new_twitter_profiles")  # new_twitter_profiles for training data
+                            count_tweets += 1
                         except pymongo.errors.DuplicateKeyError:
                             print(status.id)
                             print("\n")
                             continue
                 re_list.append(statuses)
+            print("Found ",count_tweets," relevant tweets by the user: ",status.author.screen_name)
         return re_list
 
