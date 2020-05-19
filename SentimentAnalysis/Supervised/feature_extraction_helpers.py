@@ -1,6 +1,6 @@
 from emot.emo_unicode import UNICODE_EMO, EMOTICONS
 from sklearn.feature_extraction.text import TfidfVectorizer
-
+from sklearn.feature_extraction.text import CountVectorizer
 
 # Helper functions to extract features and preprocces the dataset
 # Extract semantic of the emoji
@@ -9,7 +9,7 @@ def extract_emojis_semantic(tokens):
         for token in tokens:
             if token == emot:
                 tokens.append(token.replace(emot, "_".join(
-                    UNICODE_EMO[emot].replace(",", "").replace(":", "").split()))) # Replace emoji with their meaning
+                    UNICODE_EMO[emot].replace(",", "").replace(":", "").split())))  # Replace emoji with their meaning
                 tokens.remove(emot)
     return tokens
 
@@ -35,3 +35,11 @@ tfidf = TfidfVectorizer(
     preprocessor=dummy_tokenizer,
     token_pattern=None)
 
+# Create count vectorizer
+cv = CountVectorizer(
+    analyzer='word',
+    tokenizer=dummy_tokenizer,
+    preprocessor=dummy_tokenizer,
+    ngram_range=(1, 1),
+    min_df=10,
+    max_df=100)
