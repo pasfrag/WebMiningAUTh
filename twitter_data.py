@@ -1,9 +1,7 @@
 import datetime
 import time
 import re
-
 import pymongo
-
 import lexicons
 from tweepy import API, OAuthHandler, Cursor, TweepError
 from mongo import MongoHandler
