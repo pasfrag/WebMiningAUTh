@@ -18,7 +18,6 @@ def preprocces_dataframe(df):
     df["SurpriseEmojis"] = df['Tweet'].apply(lambda x: find_number_of_emojis(x, surprise_emojis))
     df["FearEmojis"] = df['Tweet'].apply(lambda x: find_number_of_emojis(x, fear_emojis))
     df["AngerEmojis"] = df['Tweet'].apply(lambda x: find_number_of_emojis(x, anger_emojis))
-    # df["target"] = df[['joy','anger','disgust','fear','sadness','surprise']].apply(np.array, axis=1)
     return df
 
 

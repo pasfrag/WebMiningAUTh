@@ -54,6 +54,7 @@ dt = OneVsRestClassifier(DecisionTreeClassifier(), n_jobs=1)
 lr = OneVsRestClassifier((LogisticRegression(solver='lbfgs')))
 rf = RandomForestClassifier(max_depth=4, random_state=0)
 
+# Save predictions to dataframe
 predictions = pd.DataFrame(columns=emotions_categories)
 
 # for model in [nb, lr, dt, rf]:
@@ -65,5 +66,6 @@ for emotion in emotions_categories:
     # print('Accuracy is {}'.format(accuracy_score(y_val[emotion], y_pred)))
     # print('F1 is {}'.format(f1_score(y_val[emotion], y_pred, average='micro')))
     # print('Hamming loss is {}'.format(f1_score(y_val[emotion], y_pred)))
+
 
 print(predictions)
