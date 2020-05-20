@@ -16,9 +16,9 @@ tweets = mongo_connect.retrieve_from_collection("twitter")  # Retrieve tweets fr
 insta = mongo_connect.retrieve_from_collection("instagram")  # Retrieve insta posts from collection
 
 # Read tweets from mongo
-mongo_tweets = pd.DataFrame(list(insta))
+mongo_tweets = pd.DataFrame(list(tweets))
 mongo_tweets = mongo_tweets.sample(frac=1, random_state=1)
-mongo_tweets = mongo_tweets[['test']]
+mongo_tweets = mongo_tweets[['text']]
 
 # Read instagram posts from mongo
 # mongo_insta = pd.DataFrame(list(insta))
