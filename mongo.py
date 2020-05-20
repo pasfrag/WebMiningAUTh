@@ -15,7 +15,7 @@ class MongoHandler(object):
 
     def retrieve_from_collection(self, col_name):
         collection = self.db[col_name]
-        return collection.find()
+        return collection.find(no_cursor_timeout=True)
 
     def get_with_id(self, col_name, dict_wit_id):
         collection = self.db[col_name]

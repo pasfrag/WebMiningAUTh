@@ -1,4 +1,5 @@
 import pandas as pd
+from keras.optimizers import Adam
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import metrics, model_selection, svm
 from sklearn.linear_model import LogisticRegression
@@ -144,17 +145,19 @@ def test_doc2vec():
     x_test = pd.DataFrame(x_test1)
 
     model_nn = Sequential()
-    model_nn.add(Dense(500, input_dim=200, activation="sigmoid"))
-    model_nn.add(Dense(500, activation="sigmoid"))
-    model_nn.add(Dense(500, activation="sigmoid"))
-    model_nn.add(Dense(500, activation="sigmoid"))
-    model_nn.add(Dense(1, activation="softmax"))
+    model_nn.add(Dense(512, input_dim=200, activation="sigmoid"))
+    model_nn.add(Dense(256, activation="sigmoid"))
+    model_nn.add(Dense(128, activation="sigmoid"))
+    model_nn.add(Dense(64, activation="sigmoid"))
+    model_nn.add(Dense(2, activation="softmax"))
 
-    model_nn.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    optimizer = Adam(lr=0.01)
+    model_nn.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
     model_nn.fit(x_train, train["label"], epochs=30, batch_size=32)
 
     y_predict = model_nn.predict(x_test)
+    # y_predict = (y_predict > 0.5)
 
     print("Accuracy Score: %.4f" % metrics.accuracy_score(test["label"], y_predict))
     print("Precision: %.4f" % metrics.precision_score(test["label"], y_predict, average="macro"))
