@@ -1,10 +1,9 @@
 import datetime
 import time
 import re
-
 import pymongo
-
 import lexicons
+import pandas as pd
 from tweepy import API, OAuthHandler, Cursor, TweepError
 from mongo import MongoHandler
 from preprocessing_functions import preprocess_text
@@ -13,6 +12,7 @@ import textblob
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from langdetect import detect
+from SentimentAnalysis.Unsupervised.NRC import get_emotions
 
 
 def sentiment_analyzer_scores(sentence):
@@ -104,14 +104,23 @@ class TweetMiner(object):
     def get_user_tweets(self):
         re_list = []
         # for user in lexicons.deniers:
-        for user in lexicons.non_deniers:
-            for i in range(1, 10):  # starting with 1-10
-                statuses = self.api.user_timeline(screen_name=user, count=50, page=i, lang="en", tweet_mode="extended")
+        # for user in lexicons.non_deniers:
+
+        i = 0
+        for user in ["GretaThunberg"]:  # lexicons.new_profiles2:
+            print(1)
+            user_tweets = []
+            count_tweets = 0
+            for i in range(1, 20):  # starting with 1-10 # 1-50 for new profiles
+                statuses = self.api.user_timeline(screen_name=user,
+                                                  count=50, page=i, lang="en",
+                                                  tweet_mode="extended") # = user !!!
                 for status in statuses:
                     if any(keyword in status.full_text for keyword in lexicons.keywords) \
                             and len(status.full_text.split()) >= 5 \
                             and detect(status.full_text) == 'en':
                             # and not status.full_text.startswith("RT @"):
+                        print(2)
                         status_dict = dict()
                         status_dict["_id"] = status.id
                         status_dict["user_name"] = status.author.screen_name
@@ -123,17 +132,34 @@ class TweetMiner(object):
 
                         status_dict["sentiment"] = round(sentiment_analyzer_scores(status.full_text)['compound'], 3)
 
-                        subj = TextBlob(''.join(status.full_text)).sentiment
-                        status_dict["subjectivity"] = round(subj[1],3)
+                        anger, anticipation, disgust, fear, joy, _negative, _positive, sadness, surprise, trust = get_emotions(clean_text)
+                        status_dict["anger"] = anger
+                        status_dict["anticipation"] = anticipation
+                        status_dict["disgust"] = disgust
+                        status_dict["fear"] = fear
+                        status_dict["joy"] = joy
+                        status_dict["sadness"] = sadness
+                        status_dict["surprise"] = surprise
+                        status_dict["trust"] = trust
 
-                        status_dict["label"] = 0 # non - denier
+                        subj = TextBlob(''.join(status.full_text)).sentiment
+                        status_dict["subjectivity"] = round(subj[1], 3)
+
+                        # status_dict["label"] = 0 # non - denier
                         # status_dict["label"] = 1 # denier
-                        try:
-                            self.connection.store_to_collection(status_dict, "twitter_profiles")
-                        except pymongo.errors.DuplicateKeyError:
-                            print(status.id)
-                            print("\n")
-                            continue
-                re_list.append(statuses)
+                        user_tweets.append(status_dict)
+                # re_list.append(statuses)
+            for status_dict in user_tweets:
+                try:
+                    # self.connection.store_to_collection(status_dict, "twitter_profiles_1K")  # new_twitter_profiles for training data
+                    count_tweets += 1
+                except pymongo.errors.DuplicateKeyError:
+                    print(status_dict.id)
+                    print("\n")
+                    continue
+            print("Found ", count_tweets, " relevant tweets by the user: ", user)
+            i += 1
+            if (i % 50) == 0:
+                time.sleep(300)
         return re_list
 

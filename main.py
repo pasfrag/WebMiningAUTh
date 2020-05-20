@@ -12,8 +12,3 @@ t_miner = TweetMiner()
 # i_miner.preprocess_posts()
 
 user = t_miner.get_user_tweets()
-
-
-
-
-

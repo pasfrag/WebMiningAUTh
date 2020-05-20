@@ -15,8 +15,15 @@ class MongoHandler(object):
 
     def retrieve_from_collection(self, col_name):
         collection = self.db[col_name]
-        return collection.find()
+        return collection.find(no_cursor_timeout=True)
 
     def get_with_id(self, col_name, dict_wit_id):
         collection = self.db[col_name]
         return collection.find(dict_wit_id)
+
+    def delete_with_name(self,col_name, name):
+        collection = self.db[col_name]
+        query = {"user_name": name}
+        x = collection.delete_many(query)
+        print(x.deleted_count, " documents deleted.")
+
