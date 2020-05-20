@@ -1,6 +1,7 @@
-from emot.emo_unicode import UNICODE_EMO, EMOTICONS
+from emot.emo_unicode import UNICODE_EMO
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
+
 
 # Helper functions to extract features and preprocces the dataset
 # Extract semantic of the emoji
