@@ -6,7 +6,7 @@ from mongo import MongoHandler
 # connection = MongoHandler()
 
 def get_emotions(words_list):
-    filepath = "C:\\Users\\pasca\\Desktop\\Projects\\Python_Projects\\WebMiningAUTh\\SentimentAnalysis\\Unsupervised\\NRC-Emotion-Lexicon-Wordlevel-v0.92.txt"
+    filepath = "SentimentAnalysis\\Unsupervised\\NRC-Emotion-Lexicon-Wordlevel-v0.92.txt"
     emolex_df = pd.read_csv(filepath, names=["word", "emotion", "association"], sep='\t')
     emolex_words = emolex_df.pivot(index='word', columns='emotion', values='association')
     word_emotions = emolex_df.iloc[:, 0].tolist()
