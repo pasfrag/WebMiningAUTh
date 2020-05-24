@@ -39,6 +39,7 @@ tfidf = TfidfVectorizer(
     max_df=100
 )
 
+
 # Create count vectorizer
 cv = CountVectorizer(
     analyzer='word',
