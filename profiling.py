@@ -1,33 +1,35 @@
 import pandas as pd
-from keras.optimizers import Adam
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import metrics, model_selection, svm
+from sklearn import metrics, model_selection, svm, neighbors
 from sklearn.linear_model import LogisticRegression
 from mongo import MongoHandler
+from secret_keys import insta_username, insta_password
 import pickle
+import lexicons
 import multiprocessing
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
-from keras.models import Sequential
-from keras.layers import Dense
+from nltk.corpus import words
+from collections import Counter
+# from keras.optimizers import Adam
+# from keras.models import Sequential
+# from keras.layers import Dense
 
 mongo_connect = MongoHandler()
-# mongo_connect.delete_with_name("new_twitter_profiles","Electroversenet")
 
 def dummy(doc):
     return doc
 
 def test_new_profiles():
-
     # svm_load = pickle.load(open('svm.pickle', 'rb'))
     LR = pickle.load(open('LR2.pickle', 'rb'))
     tfidf_load = pickle.load(open('tfidf.pickle', 'rb'))
-    new_profiles = mongo_connect.retrieve_from_collection("new_twitter_profiles")
+    new_profiles = mongo_connect.retrieve_from_collection("twitter_profiles_1K") # new_twitter_profiles
     df = pd.DataFrame(list(new_profiles))
     df.groupby('user_name')
 
     count_den = count_non = count_unc = 0
     for user in df.groupby('user_name'):
-        name = user[1].iloc[1,1]
+        # name = user[1].iloc[1,1]
         text = user[1]['text']
         sent = user[1]['sentiment']
         subj = user[1]['subjectivity']
@@ -41,36 +43,37 @@ def test_new_profiles():
         count0 = sum(y_predict == 0)
         count1 = sum(y_predict == 1)
 
-        print("\nPrediction for user: ", name)
-        div1 = (count1 + 1) / (count0 + 1)
-        div0 = (count0 + 1) / (count1 + 1)
+        # print("\nPrediction for user: ", name)
+        div1 = (count1 + 0.001) / (count0 + 0.001)
+        div0 = (count0 + 0.001) / (count1 + 0.001)
 
-        print(round(div1,2), round(div0, 2))
+        # print(round(div1,2), round(div0, 2))
         if div1 > 2:
-            print("Class: DENIER")
+            # print("Class: DENIER")
             count_den += 1
         elif div0 > 2:
-            print("Class: NON-DENIER")
+            # print("Class: NON-DENIER")
             count_non += 1
         else:
-            print("Class: UNCERTAIN")
+            # print("Class: UNCERTAIN")
             count_unc += 1
 
-        print("User's sentiment score: ", sent, " and subjectivity score:", subj)
+        # print("User's sentiment score: ", sent, " and subjectivity score:", subj)
 
-        # print("Score:  %.2f" % div1)
-        #
-        # if div > 0.7:
-        #     print("Class: Denier")
-        # elif div < 0.3:
-        #     print("Class: Non-denier")
-        # else:
-        #     print("Uncertain prediction")
-
-        # if name == 'realDonaldTrump':
-        #     for i in range(len(y_predict)):
-        #         print(text.iloc[i], y_predict[i])
+        # TO-DO: Save on a new Collection
+        # with Predicted label, Score, NOTE! <10
     print("Found: ",count_den,"deniers, ",count_non,"non-deniers and",count_unc,"uncertain cases" )
+
+def get_user_names():
+    df = pd.read_csv('user_names.csv')
+    # print (pd.DataFrame(users.values.tolist()).stack().value_counts())
+    users = df.groupby('user_screen_name').agg(['nunique']).reset_index(drop=False)
+    users = users.sample(frac=1, random_state=1)
+    profiles = []
+    for user in users['user_screen_name']:
+        if user not in lexicons.already_loaded:
+            profiles.append(user)
+    return profiles
 
 def train_profiling_model():
     profiles = mongo_connect.retrieve_from_collection("twitter_profiles")
@@ -116,11 +119,6 @@ def train_profiling_model():
     # test_model()
     # export_final_model()
 
-# train_profiling_model()
-# test_new_profiles()
-
-print("---------------------------------------------------------------------------------")
-
 def test_doc2vec():
     profiles = mongo_connect.retrieve_from_collection("twitter_profiles")
 
@@ -165,4 +163,57 @@ def test_doc2vec():
     print(" F1: %.4f" % metrics.f1_score(test["label"], y_predict, average="macro"))
     print(metrics.confusion_matrix(test["label"], y_predict))
 
-test_doc2vec()
+def insta_profiles():
+    import instaloader
+    L = instaloader.Instaloader(
+                download_pictures=False, download_video_thumbnails=False, download_videos=False, compress_json=False,
+                sleep=True)
+    L.login(insta_username,insta_password)
+
+    df = pd.read_csv('insta_users.csv')
+    user_id = df.groupby('user_id').agg(['nunique']).reset_index(drop=False)
+    user_id = user_id['user_id']
+
+    for i in range(158, 200):
+        user_dict = dict()
+        print(user_id[i])
+        profile = instaloader.Profile.from_id(L.context, user_id[i])
+
+        limit_posts = 0
+        user_dict['_id'] = int(user_id[i])
+        hashtags = []
+        for post in profile.get_posts():
+            for tag in post.caption_hashtags:
+               hashtags.append(tag)
+            limit_posts += 1
+            if limit_posts >= 50:
+                break
+        user_dict['hashtags'] = hashtags
+        mongo_connect.store_to_collection(user_dict, "ig_users")
+
+def user_interests():
+    ig_users = mongo_connect.retrieve_from_collection("ig_users")
+    df = pd.DataFrame(list(ig_users))
+    hashtags = df['hashtags']
+    english_dict = words.words()
+    covid = ['covid','virus','pandemic','corona','quarantine','isolation']
+
+    all_tags = []
+    for tag in hashtags:
+        en_tag = []
+        for word in tag:
+            if word in english_dict and word not in covid:
+                en_tag.append(word)
+                all_tags.append(word)
+        counts = Counter(en_tag)
+        if len(counts) > 0:
+            interests = counts.most_common(5)
+            print(interests)
+
+    total_count = Counter(all_tags)
+    print(total_count.most_common(10))
+
+# train_profiling_model()
+# test_new_profiles()
+# insta_profiles()
+# user_interests()

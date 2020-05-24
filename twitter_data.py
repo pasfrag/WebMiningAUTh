@@ -1,7 +1,11 @@
 import datetime
 import time
 import re
+
+import langdetect
 import pymongo
+import tweepy
+
 import lexicons
 import pandas as pd
 from tweepy import API, OAuthHandler, Cursor, TweepError
@@ -13,14 +17,15 @@ from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from langdetect import detect
 from SentimentAnalysis.Unsupervised.NRC import get_emotions
+import profiling
 
 
 def sentiment_analyzer_scores(sentence):
     score = SentimentIntensityAnalyzer().polarity_scores(sentence)
     return score
 
-class TweetMiner(object):
 
+class TweetMiner(object):
     api = None
     connection = None
 
@@ -37,7 +42,8 @@ class TweetMiner(object):
         new_ids_list = [row["_id"] for row in new_posts]
         ids_list = [
             row["_id"] for row in old_posts
-            if not row["_id"] in new_ids_list and not row["full_text"].startswith("RT @") and ("promo" or "giveaway") not in row["full_text"] and len(row["full_text"].split()) >= 5
+            if not row["_id"] in new_ids_list and not row["full_text"].startswith("RT @") and (
+                    "promo" or "giveaway") not in row["full_text"] and len(row["full_text"].split()) >= 5
         ]
 
         print("Starting...")
@@ -59,10 +65,9 @@ class TweetMiner(object):
         print("--------------------------------")
         print(f"Number of not found: {count0}")
 
-
     def preprocess_tweet(self, tweet):
         tweet_dict = dict()
-        tweet_dict["_id"] = tweet["_id"]
+        tweet_dict["_id"] = tweet["id"]
         created_at = time.strftime('%Y-%m-%d', time.strptime(tweet["created_at"], '%a %b %d %H:%M:%S +0000 %Y'))
         tweet_dict["created_at"] = created_at
         tweet_dict["text"] = preprocess_text(tweet["full_text"])
@@ -91,7 +96,6 @@ class TweetMiner(object):
         self.connection.store_to_collection(tweet_dict, "twitter_new")
         return tweet_dict
 
-
     def get_new_tweets(self):
         count = 0
         for tweet in Cursor(self.api.search, q="@#ClimateChange", lang="en", tweet_mode="extended").items():
@@ -101,65 +105,80 @@ class TweetMiner(object):
         print("--------------------------------")
         print(f"Number of found: {count}")
 
+
     def get_user_tweets(self):
         re_list = []
+        users = profiling.get_user_names()
         # for user in lexicons.deniers:
         # for user in lexicons.non_deniers:
 
-        i = 0
-        for user in ["GretaThunberg"]:  # lexicons.new_profiles2:
-            print(1)
-            user_tweets = []
-            count_tweets = 0
-            for i in range(1, 20):  # starting with 1-10 # 1-50 for new profiles
-                statuses = self.api.user_timeline(screen_name=user,
-                                                  count=50, page=i, lang="en",
-                                                  tweet_mode="extended") # = user !!!
-                for status in statuses:
-                    if any(keyword in status.full_text for keyword in lexicons.keywords) \
-                            and len(status.full_text.split()) >= 5 \
-                            and detect(status.full_text) == 'en':
+        count_users = 0
+        for user in users[489:500]:  # 363
+            try:
+                print("User: ", user)
+                user_tweets = []
+                count_tweets = 0
+                for i in range(1, 20):  # starting with 1-10 # 1-50 for test profiles #1-20 for 1K profiles
+                    statuses = self.api.user_timeline(screen_name=user,
+                                                      count=50, page=i, lang="en",
+                                                      tweet_mode="extended")  # = user !!!
+                    for status in statuses:
+                        if any(keyword in status.full_text for keyword in lexicons.keywords) \
+                                and len(status.full_text.split()) >= 5 \
+                                and detect(status.full_text) == 'en':
                             # and not status.full_text.startswith("RT @"):
-                        print(2)
-                        status_dict = dict()
-                        status_dict["_id"] = status.id
-                        status_dict["user_name"] = status.author.screen_name
-                        status_dict["location"] = status.author.location
-                        status_dict["description"] = preprocess_text(status.author.description)
-                        status_dict['date'] = f"{status.created_at.year}-{status.created_at.month}-{status.created_at.day}"
-                        clean_text = preprocess_text(re.sub(r'^RT\s@\w+:', r'', status.full_text))
-                        status_dict["text"] = clean_text
+                            status_dict = dict()
+                            status_dict["_id"] = status.id
+                            status_dict["user_name"] = status.author.screen_name
+                            status_dict["location"] = status.author.location
+                            status_dict["description"] = preprocess_text(status.author.description)
+                            status_dict[
+                                'date'] = f"{status.created_at.year}-{status.created_at.month}-{status.created_at.day}"
+                            clean_text = preprocess_text(re.sub(r'^RT\s@\w+:', r'', status.full_text))
+                            status_dict["text"] = clean_text
 
-                        status_dict["sentiment"] = round(sentiment_analyzer_scores(status.full_text)['compound'], 3)
+                            status_dict["sentiment"] = round(sentiment_analyzer_scores(status.full_text)['compound'], 3)
 
-                        anger, anticipation, disgust, fear, joy, _negative, _positive, sadness, surprise, trust = get_emotions(clean_text)
-                        status_dict["anger"] = anger
-                        status_dict["anticipation"] = anticipation
-                        status_dict["disgust"] = disgust
-                        status_dict["fear"] = fear
-                        status_dict["joy"] = joy
-                        status_dict["sadness"] = sadness
-                        status_dict["surprise"] = surprise
-                        status_dict["trust"] = trust
+                            anger, anticipation, disgust, fear, joy, _negative, _positive, sadness, surprise, trust = get_emotions(
+                                clean_text)
+                            status_dict["anger"] = anger
+                            status_dict["anticipation"] = anticipation
+                            status_dict["disgust"] = disgust
+                            status_dict["fear"] = fear
+                            status_dict["joy"] = joy
+                            status_dict["sadness"] = sadness
+                            status_dict["surprise"] = surprise
+                            status_dict["trust"] = trust
 
-                        subj = TextBlob(''.join(status.full_text)).sentiment
-                        status_dict["subjectivity"] = round(subj[1], 3)
+                            subj = TextBlob(''.join(status.full_text)).sentiment
+                            status_dict["subjectivity"] = round(subj[1], 3)
 
-                        # status_dict["label"] = 0 # non - denier
-                        # status_dict["label"] = 1 # denier
-                        user_tweets.append(status_dict)
-                # re_list.append(statuses)
-            for status_dict in user_tweets:
-                try:
-                    # self.connection.store_to_collection(status_dict, "twitter_profiles_1K")  # new_twitter_profiles for training data
-                    count_tweets += 1
-                except pymongo.errors.DuplicateKeyError:
-                    print(status_dict.id)
-                    print("\n")
-                    continue
-            print("Found ", count_tweets, " relevant tweets by the user: ", user)
-            i += 1
-            if (i % 50) == 0:
-                time.sleep(300)
+                            # status_dict["label"] = 0 # non - denier
+                            # status_dict["label"] = 1 # denier
+                            user_tweets.append(status_dict)
+                    # re_list.append(statuses)
+                for status_dict in user_tweets:
+                    try:
+                        self.connection.store_to_collection(status_dict,
+                                                            "twitter_profiles_1K")  # new_twitter_profiles for training data
+                        count_tweets += 1
+                    except pymongo.errors.DuplicateKeyError:
+                        # print(status_dict.id)
+                        print("exception")
+                        continue
+                print("Found ", count_tweets, " relevant tweets by the user: ", user)
+                count_users += 1
+                if (count_users % 20) == 0:
+                    print("test sleep!")
+                    time.sleep(300)
+                    print("test sleep ended!!!")
+                if count_users > 1001:
+                    print("break!")
+                    break
+            except tweepy.error.TweepError:
+                print("Locked profile!")
+                continue
+            except langdetect.lang_detect_exception.LangDetectException:
+                continue
+
         return re_list
-

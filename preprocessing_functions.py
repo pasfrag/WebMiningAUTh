@@ -3,7 +3,6 @@ from nltk import TweetTokenizer, WordNetLemmatizer, pos_tag
 from nltk.corpus import wordnet
 from lexicons import contractions, punctuations, en_stopwords
 
-
 def preprocess_text(tweet_text):
     tweet_tokenizer = TweetTokenizer()
 
@@ -26,7 +25,6 @@ def preprocess_text(tweet_text):
 
     return text
 
-
 def nltk_tag_to_wordnet_tag(nltk_tag):
     if nltk_tag.startswith('J'):
         return wordnet.ADJ
@@ -38,3 +36,11 @@ def nltk_tag_to_wordnet_tag(nltk_tag):
         return wordnet.ADV
     else:
         return None
+
+def get_hashtags(text):
+    tweet_tokenizer = TweetTokenizer()
+    return [token for token in tweet_tokenizer.tokenize(text) if re.match("^#(\w+)", token)]
+
+def get_mentions(text):
+    tweet_tokenizer = TweetTokenizer()
+    return [token for token in tweet_tokenizer.tokenize(text) if re.match("^@(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$", token)]
