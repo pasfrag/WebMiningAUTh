@@ -9,21 +9,22 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score, hamming_loss
 from mongo import MongoHandler
-
+import matplotlib.pyplot as plt
 # Connect to mongo to retrieve tweets and insta post
 mongo_connect = MongoHandler()
-tweets = mongo_connect.retrieve_from_collection("twitter")  # Retrieve tweets from collection
+# tweets = mongo_connect.retrieve_from_collection("twitter")  # Retrieve tweets from collection
 insta = mongo_connect.retrieve_from_collection("instagram")  # Retrieve insta posts from collection
 
 # Read tweets from mongo
-mongo_tweets = pd.DataFrame(list(tweets))
-mongo_tweets = mongo_tweets.sample(frac=1, random_state=1)
-mongo_tweets = mongo_tweets[['text']]
+# mongo_tweets = pd.DataFrame(list(tweets))
+# print(mongo_tweets.columns)
+# mongo_tweets = mongo_tweets.sample(frac=1, random_state=1)
+# mongo_tweets = mongo_tweets[['_id','text']]
 
 # Read instagram posts from mongo
-# mongo_insta = pd.DataFrame(list(insta))
-# mongo_insta = mongo_tweets.sample(frac=1, random_state=1)
-# mongo_insta = mongo_tweets[['caption']]
+mongo_insta = pd.DataFrame(list(insta))
+mongo_insta = mongo_insta.sample(frac=1, random_state=1)
+mongo_insta = mongo_insta[['_id','caption']]
 
 # Read the dataset
 data = pd.read_csv("2018-11 emotions-classification-train.txt", sep="\t")
@@ -38,13 +39,13 @@ train_dataset, val_dataset = train_test_split(emotions, test_size=0.3, train_siz
 # Vectorize tweet text
 train_emotions = vectorize_train_dataframe(train_dataset)
 val_emotions = vectorize_test_dataframe(val_dataset)
-test_emotions = preprocces_mongo_tweets_and_posts(mongo_tweets)
+test_emotions = preprocces_mongo_tweets_and_posts(mongo_insta)
 
 # Define feature columns
 X_train = train_emotions.iloc[:, 6:]
 X_val = val_emotions.iloc[:, 6:]
-X_test = test_emotions.iloc[:, 1:]
-# X_test = test_emotions.iloc[:, 2:] For instagram posts
+# X_test = test_emotions.iloc[:, 2:]
+X_test = test_emotions.iloc[:, 3:]  #For instagram posts
 
 # Define target labels
 y_train = train_emotions.iloc[:, :6]
@@ -78,14 +79,14 @@ for emotion in emotions_categories:
     # print('Hamming loss is {}'.format(f1_score(y_val[emotion], y_pred)))
 
 # Concatenate text and predictions
-mongo_tweets.reset_index(drop=True, inplace=True)
+mongo_insta.reset_index(drop=True, inplace=True)
 predictions.reset_index(drop=True, inplace=True)
-predictions = pd.concat([predictions, mongo_tweets], axis=1)
+predictions = pd.concat([predictions, mongo_insta], axis=1)
 
 # Connect to database and save the predictions for each tweet/insta post
 client = mongo_connect.client
 database = client['supervised_sentiment_analysis']
-collection = database['twitter_emotions']
+collection = database['insta_emotions']
 predictions.reset_index(inplace=True)
 predictions_dict = predictions.to_dict("records")
 

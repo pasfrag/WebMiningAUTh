@@ -51,8 +51,8 @@ def vectorize_test_dataframe(df):
     return df
 
 def preprocces_mongo_tweets_and_posts(df):
-    df['text'] = df['text'].apply(lambda x: extract_emojis_semantic(x))
-    # df['text'] = df['caption'].apply(lambda x: extract_emojis_semantic(x))  # For instagram posts
+    # df['text'] = df['text'].apply(lambda x: extract_emojis_semantic(x))
+    df['text'] = df['caption'].apply(lambda x: extract_emojis_semantic(x))  # For instagram posts
     # Create columns to store number of emojis occurence based on their emotion (already existing labeled emojis)
     df["JoyEmojis"] = df['text'].apply(lambda x: find_number_of_emojis(x, joy_emojis))
     df["SadEmojis"] = df['text'].apply(lambda x: find_number_of_emojis(x, sad_emojis))
