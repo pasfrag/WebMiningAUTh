@@ -216,7 +216,8 @@ def user_interests():
     print(total_count.most_common(10))
     return all_tags, total_count
 
+
 # train_profiling_model()
 # test_new_profiles()
-insta_profiles()
+# insta_profiles()
 # all_tags, total_count = user_interests()
