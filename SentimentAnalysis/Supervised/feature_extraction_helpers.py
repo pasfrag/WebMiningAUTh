@@ -34,7 +34,11 @@ tfidf = TfidfVectorizer(
     analyzer='word',
     tokenizer=dummy_tokenizer,
     preprocessor=dummy_tokenizer,
-    token_pattern=None)
+    token_pattern=None,
+    min_df=10,
+    max_df=100
+)
+
 
 # Create count vectorizer
 cv = CountVectorizer(
