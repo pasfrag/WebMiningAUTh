@@ -31,14 +31,17 @@ def word_cloud(df):
     from wordcloud import WordCloud
     from PIL import Image
 
-    char_mask = np.array(Image.open("data/earth.png"))
+    char_mask = np.array(Image.open("data/instagram.png"))
     image_colors = wordcloud.ImageColorGenerator(char_mask)
 
     wc0 = WordCloud(background_color="white", max_words=200, width=400, height=400, mask=char_mask, random_state=1)\
-        .generate(df['text'][df['label'] == 0].to_string())
+       .generate(' '.join(df))
 
-    wc1 = WordCloud(background_color="white", max_words=200, width=400, height=400, mask=char_mask, random_state=1)\
-        .generate(df['text'][df['label'] == 1].to_string())
+    # wc0 = WordCloud(background_color="white", max_words=200, width=400, height=400, mask=char_mask, random_state=1)\
+    #    .generate(df['text'][df['label'] == 0].to_string())
+
+    # wc1 = WordCloud(background_color="white", max_words=200, width=400, height=400, mask=char_mask, random_state=1)\
+    #    .generate(df['text'][df['label'] == 1].to_string())
 
     plt.axis("off")
     plt.imshow(wc0.recolor(color_func=image_colors))

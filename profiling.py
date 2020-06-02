@@ -20,9 +20,9 @@ def dummy(doc):
     return doc
 
 def test_new_profiles():
-    # svm_load = pickle.load(open('svm.pickle', 'rb'))
-    LR = pickle.load(open('LR2.pickle', 'rb'))
-    tfidf_load = pickle.load(open('tfidf.pickle', 'rb'))
+    # svm_load = pickle.load(open('final_models/final_svm.pickle', 'rb'))
+    LR = pickle.load(open('final_models/final_LR.pickle', 'rb'))
+    tfidf_load = pickle.load(open('final_models/final_tfidf.pickle', 'rb'))
     new_profiles = mongo_connect.retrieve_from_collection("twitter_profiles_1K") # new_twitter_profiles
     df = pd.DataFrame(list(new_profiles))
     df.groupby('user_name')
@@ -65,7 +65,7 @@ def test_new_profiles():
     print("Found: ",count_den,"deniers, ",count_non,"non-deniers and",count_unc,"uncertain cases" )
 
 def get_user_names():
-    df = pd.read_csv('user_names.csv')
+    df = pd.read_csv('data/user_names.csv')
     # print (pd.DataFrame(users.values.tolist()).stack().value_counts())
     users = df.groupby('user_screen_name').agg(['nunique']).reset_index(drop=False)
     users = users.sample(frac=1, random_state=1)
@@ -106,15 +106,15 @@ def train_profiling_model():
 
     def export_final_model():
         tfidf.fit(text)
-        pickle.dump(tfidf, open("tfidf.pickle", "wb"))
+        pickle.dump(tfidf, open("final_models/final_tfidf.pickle", "wb"))
         text_tf = tfidf.transform(text)
         x = pd.DataFrame(text_tf.todense())
         model = LogisticRegression(random_state=0, solver='lbfgs')
         # model = svm.SVC(gamma=0.2, max_iter=1000)
 
         model.fit(x, y)
-        pickle.dump(model, open('LR2.pickle', 'wb'))
-        # pickle.dump(model2, open('svm2.pickle', 'wb'))
+        pickle.dump(model, open('final_models/final_LR.pickle', 'wb'))
+        # pickle.dump(model2, open('final_models/final_svm.pickle', 'wb'))
 
     # test_model()
     # export_final_model()
@@ -170,11 +170,11 @@ def insta_profiles():
                 sleep=True)
     L.login(insta_username,insta_password)
 
-    df = pd.read_csv('insta_users.csv')
+    df = pd.read_csv('data/insta_users.csv')
     user_id = df.groupby('user_id').agg(['nunique']).reset_index(drop=False)
     user_id = user_id['user_id']
 
-    for i in range(158, 200):
+    for i in range(476, 501):
         user_dict = dict()
         print(user_id[i])
         profile = instaloader.Profile.from_id(L.context, user_id[i])
@@ -196,13 +196,14 @@ def user_interests():
     df = pd.DataFrame(list(ig_users))
     hashtags = df['hashtags']
     english_dict = words.words()
-    covid = ['covid','virus','pandemic','corona','quarantine','isolation']
+    remove = ['covid','virus','pandemic','corona','quarantine','isolation','repost','giveaway','week','weekend']
 
+    from visualization import word_cloud
     all_tags = []
     for tag in hashtags:
         en_tag = []
         for word in tag:
-            if word in english_dict and word not in covid:
+            if word in english_dict and word not in remove:
                 en_tag.append(word)
                 all_tags.append(word)
         counts = Counter(en_tag)
@@ -211,9 +212,11 @@ def user_interests():
             print(interests)
 
     total_count = Counter(all_tags)
+    word_cloud(all_tags)
     print(total_count.most_common(10))
+    return all_tags, total_count
 
 # train_profiling_model()
 # test_new_profiles()
-# insta_profiles()
-# user_interests()
+insta_profiles()
+# all_tags, total_count = user_interests()
