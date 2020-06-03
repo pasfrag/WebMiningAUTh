@@ -32,10 +32,10 @@ y_pred = nb.predict(X_test)
 # Evaluate the model with different metrics
 print(accuracy_score(y_test, y_pred))
 print(f1_score(y_test, y_pred, average='macro'))
-print(precision_score(y_test, y_pred, average="macro"))
-print(recall_score(y_test, y_pred, average="macro"))
+# print(precision_score(y_test, y_pred, average="macro"))
+# print(recall_score(y_test, y_pred, average="macro"))
 
-# Save model to pickle
-filename = 'models/naive_bayes.pkl'
-with open(filename, 'wb') as file:
-    pickle.dump(nb, file)
+# # Save model to pickle
+# filename = 'models/naive_bayes.pkl'
+# with open(filename, 'wb') as file:
+#     pickle.dump(nb, file)

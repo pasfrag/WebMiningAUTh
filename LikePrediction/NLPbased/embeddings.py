@@ -2,6 +2,7 @@ import numpy as np
 from keras import Sequential
 from keras.layers import Dropout, Conv1D, Embedding, MaxPooling1D, LSTM, Dense
 from LikePrediction.NLPbased.like_prediction_vectorizer import read_tweets_and_instaposts, split_and_preprocces, NUM_WORDS, tokenizer
+from LikePrediction.NLPbased.metrics import recall,f1,precision
 
 # Read tweets from connection and preprocess them to have the right input for our nn
 coll_name = 'twitter_final'
@@ -37,15 +38,20 @@ glove.add(MaxPooling1D(pool_size=4))
 glove.add(LSTM(100, return_sequences=True))
 glove.add(Dropout(0.2))
 glove.add(LSTM(100))
-glove.add(Dense(4, activation='sigmoid'))
-glove.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+glove.add(Dense(4, activation='softmax'))
+glove.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy',f1,precision, recall])
 
 # Train the model and make predictions
-glove.fit(X_train, y_train, epochs=6)
+glove.fit(X_train, y_train, epochs=5)
 y_pred = glove.predict(X_test)
-accuracy = glove.evaluate(X_test, y_test)
+
 print('Test set')
-print('Accuracy is: {:0.3f}'.format(accuracy[1]))
+
+loss, accuracy, f1_score, precision, recall = glove.evaluate(X_test, y_test, verbose=0)
+print(loss, accuracy, f1_score, precision, recall)
+
 
 # Save model weights
-glove.save('models/pretrained.h5')
+# glove.save('models/pretrained.h5')
+
+
