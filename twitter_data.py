@@ -19,7 +19,7 @@ from langdetect import detect
 from SentimentAnalysis.Unsupervised.NRC import get_emotions
 import profiling
 
-
+# Vader sentiment analysis
 def sentiment_analyzer_scores(sentence):
     score = SentimentIntensityAnalyzer().polarity_scores(sentence)
     return score
@@ -105,7 +105,6 @@ class TweetMiner(object):
         print("--------------------------------")
         print(f"Number of found: {count}")
 
-
     def get_user_tweets(self):
         re_list = []
         users = profiling.get_user_names()
@@ -121,7 +120,7 @@ class TweetMiner(object):
                 for i in range(1, 20):  # starting with 1-10 # 1-50 for test profiles #1-20 for 1K profiles
                     statuses = self.api.user_timeline(screen_name=user,
                                                       count=50, page=i, lang="en",
-                                                      tweet_mode="extended")  # = user !!!
+                                                      tweet_mode="extended")
                     for status in statuses:
                         if any(keyword in status.full_text for keyword in lexicons.keywords) \
                                 and len(status.full_text.split()) >= 5 \
