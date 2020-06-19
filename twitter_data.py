@@ -24,7 +24,7 @@ def sentiment_analyzer_scores(sentence):
     score = SentimentIntensityAnalyzer().polarity_scores(sentence)
     return score
 
-
+# Class for mining twitter api
 class TweetMiner(object):
     api = None
     connection = None
@@ -35,6 +35,7 @@ class TweetMiner(object):
         self.api = API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
         self.connection = MongoHandler()
 
+    # Retrieve tweets fith a given tweet id
     def get_tweets_with_id(self):
 
         old_posts = self.connection.retrieve_from_collection("twitter")
@@ -65,6 +66,7 @@ class TweetMiner(object):
         print("--------------------------------")
         print(f"Number of not found: {count0}")
 
+    # Preprocess tweet text
     def preprocess_tweet(self, tweet):
         tweet_dict = dict()
         tweet_dict["_id"] = tweet["id"]
@@ -96,6 +98,7 @@ class TweetMiner(object):
         self.connection.store_to_collection(tweet_dict, "twitter_new")
         return tweet_dict
 
+    # Retrieve new tweets
     def get_new_tweets(self):
         count = 0
         for tweet in Cursor(self.api.search, q="@#ClimateChange", lang="en", tweet_mode="extended").items():
@@ -105,6 +108,7 @@ class TweetMiner(object):
         print("--------------------------------")
         print(f"Number of found: {count}")
 
+    # Get tweets from a particular user
     def get_user_tweets(self):
         re_list = []
         users = profiling.get_user_names()

@@ -38,11 +38,12 @@ def nltk_tag_to_wordnet_tag(nltk_tag):
     else:
         return None
 
-#
+# Get hashtags from tweets
 def get_hashtags(text):
     tweet_tokenizer = TweetTokenizer()
     return [token for token in tweet_tokenizer.tokenize(text) if re.match("^#(\w+)", token)]
 
+# Get mentions from tweets
 def get_mentions(text):
     tweet_tokenizer = TweetTokenizer()
     return [token for token in tweet_tokenizer.tokenize(text) if re.match("^@(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$", token)]
