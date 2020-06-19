@@ -13,6 +13,11 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+        <script src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
+
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -21,10 +26,10 @@
                 <a class="navbar-brand js-scroll-trigger" href="#page-top">Climate Change</a><button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Portfolio</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">About</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Contact</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#newone">New One</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Data Exploration</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Events</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Profiling</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#newone">Interests</a></li>
                     </ul>
                 </div>
             </div>
@@ -33,106 +38,227 @@
         <header class="masthead bg-primary text-white text-center">
             <div class="container d-flex align-items-center flex-column">
                 <!-- Masthead Avatar Image--><img class="masthead-avatar mb-5" src="assets/img/avataaars.svg" alt="" /><!-- Masthead Heading-->
-                <h1 class="masthead-heading text-uppercase mb-0">Start Bootstrap</h1>
+                <h1 class="masthead-heading text-uppercase mb-0">Social Media Mining</h1>
                 <!-- Icon Divider-->
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-icon"><i class="fas fa-globe"></i></div>
                     <div class="divider-custom-line"></div>
                 </div>
                 <!-- Masthead Subheading-->
-                <p class="masthead-subheading font-weight-light mb-0">Graphic Artist - Web Designer - Illustrator</p>
+                <p class="masthead-subheading mb-0" style="text-align: justify">Data Visualisation is an important aspect of Data Mining in order for researchers to better analyse their work, deduce non-obvious conclusions and thereafter be able to communicate their work with others in a comprehensible and accessible manner. To that end, in the context of a Web Mining project for the “Data and Web science” MSc program, our team has created this Web application analysing the social media discussion, specifically Instagram and Twitter, centered around the topic of Climate Change. The web page is separated into four sections, and we begin by presenting our collected data regarding Twitter’s most frequent Hashtags, Users and Words related to Climate Change.</p>
             </div>
         </header>
         <!-- Portfolio Section-->
         <section class="page-section portfolio" id="portfolio">
             <div class="container">
                 <!-- Portfolio Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Portfolio</h2>
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Data Exploration</h2>
                 <!-- Icon Divider-->
                 <div class="divider-custom">
                     <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-icon"><i class="fas fa-globe"></i></div>
                     <div class="divider-custom-line"></div>
                 </div>
-                <!-- Portfolio Grid Items-->
+            </div>
+        </section>
+        <section>
+            <div class="container">
                 <div class="row">
-                    <!-- Portfolio Item 1-->
-                    <div class="col-md-6 col-lg-4 mb-5">
-                        <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal1">
-                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="" />
+                    <div id="anychart-embed-NqAPYRCG" class="col-lg-6 anychart-embed anychart-embed-NqAPYRCG">
+                        <div id="ac_style_NqAPYRCG" style="display:none;">
+                            html, body, #container123 {
+                                width: 100%;
+                                height: 100%;
+                                margin: 0;
+                                padding: 0;
+                            }
                         </div>
+                        <script>(function(){
+                            function ac_add_to_head(el){
+                                var head = document.getElementsByTagName('head')[0];
+                                head.insertBefore(el,head.firstChild);
+                            }
+                            function ac_add_link(url){
+                                var el = document.createElement('link');
+                                el.rel='stylesheet';el.type='text/css';el.media='all';el.href=url;
+                                ac_add_to_head(el);
+                            }
+                            function ac_add_style(css){
+                                var ac_style = document.createElement('style');
+                                if (ac_style.styleSheet) ac_style.styleSheet.cssText = css;
+                                else ac_style.appendChild(document.createTextNode(css));
+                                ac_add_to_head(ac_style);
+                            }
+
+                            ac_add_style(document.getElementById("ac_style_NqAPYRCG").innerHTML);
+                            ac_add_style(".anychart-embed-NqAPYRCG{width:600px;height:450px;}");
+                            })();
+                        </script>
+                        <div id="container123"></div>
+                        <script>
+                            anychart.onDocumentReady(function () {
+
+                                data = {{ data.hashtags|tojson }}
+
+                              // create a tag cloud chart
+                              var chart = anychart.tagCloud(data);
+
+                              // set the chart title
+                              chart.title('Hashtag frequency')
+                              // set array of angles, by which words will be placed
+                              chart.angles([0])
+                              chart.animation
+
+                              // display chart
+                              chart.container("container123");
+                              chart.mode("by-word");
+                              chart.draw();
+                            });
+                        </script>
                     </div>
-                    <!-- Portfolio Item 2-->
-                    <div class="col-md-6 col-lg-4 mb-5">
-                        <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal2">
-                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio/cake.png" alt="" />
+                    <div id="anychart-embed-NqAPYRCG1" class="col-lg-6 anychart-embed anychart-embed-NqAPYRCG">
+                        <div id="ac_style_NqAPYRCG1" style="display:none;">
+                            html, body, #container747 {
+                                width: 100%;
+                                height: 100%;
+                                margin: 0;
+                                padding: 0;
+                            }
                         </div>
+                        <script>(function(){
+                            function ac_add_to_head(el){
+                                var head = document.getElementsByTagName('head')[0];
+                                head.insertBefore(el,head.firstChild);
+                            }
+                            function ac_add_link(url){
+                                var el = document.createElement('link');
+                                el.rel='stylesheet';el.type='text/css';el.media='all';el.href=url;
+                                ac_add_to_head(el);
+                            }
+                            function ac_add_style(css){
+                                var ac_style = document.createElement('style');
+                                if (ac_style.styleSheet) ac_style.styleSheet.cssText = css;
+                                else ac_style.appendChild(document.createTextNode(css));
+                                ac_add_to_head(ac_style);
+                            }
+
+                            ac_add_style(document.getElementById("ac_style_NqAPYRCG").innerHTML);
+                            ac_add_style(".anychart-embed-NqAPYRCG{width:600px;height:450px;}");
+                            })();
+                        </script>
+                        <div id="container747" style="width: 100%; height:100%"></div>
+                        <script>
+                            anychart.onDocumentReady(function () {
+
+                                data = {{ data.mentions|tojson }}
+
+                              // create a tag cloud chart
+                              var chart = anychart.tagCloud(data);
+
+                              // set the chart title
+                              chart.title('Mention frequency')
+                              // set array of angles, by which words will be placed
+                              chart.angles([0])
+                              chart.animation
+
+                              // display chart
+                              chart.container("container747");
+                              chart.mode("spiral");
+                              chart.draw();
+                            });
+                        </script>
                     </div>
-                    <!-- Portfolio Item 3-->
-                    <div class="col-md-6 col-lg-4 mb-5">
-                        <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal3">
-                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio/circus.png" alt="" />
+                </div>
+                <div class="row">
+                    <div id="anychart-embed-NqAPYRCG3" class="col-lg-6 anychart-embed anychart-embed-NqAPYRCG">
+                        <div id="ac_style_NqAPYRCG3" style="display:none;">
+                            html, body, #container4 {
+                                width: 100%;
+                                height: 100%;
+                                margin: 0;
+                                padding: 0;
+                            }
                         </div>
+                        <script>(function(){
+                            function ac_add_to_head(el){
+                                var head = document.getElementsByTagName('head')[0];
+                                head.insertBefore(el,head.firstChild);
+                            }
+                            function ac_add_link(url){
+                                var el = document.createElement('link');
+                                el.rel='stylesheet';el.type='text/css';el.media='all';el.href=url;
+                                ac_add_to_head(el);
+                            }
+                            function ac_add_style(css){
+                                var ac_style = document.createElement('style');
+                                if (ac_style.styleSheet) ac_style.styleSheet.cssText = css;
+                                else ac_style.appendChild(document.createTextNode(css));
+                                ac_add_to_head(ac_style);
+                            }
+
+                            ac_add_style(document.getElementById("ac_style_NqAPYRCG").innerHTML);
+                            ac_add_style(".anychart-embed-NqAPYRCG{width:600px;height:450px;}");
+                            })();
+                        </script>
+                        <div id="container4" style="width: 100%; height:100%"></div>
+                        <script>
+                            anychart.onDocumentReady(function () {
+
+                                data = {{ data.words|tojson }}
+
+                              // create a tag cloud chart
+                              var chart = anychart.tagCloud(data);
+
+                              // set the chart title
+                              chart.title('Most frequent words')
+                              // set array of angles, by which words will be placed
+                              chart.angles([0])
+                              chart.animation
+
+                              // display chart
+                              chart.container("container4");
+                              chart.mode("spiral");
+                              chart.draw();
+                            });
+                        </script>
                     </div>
-                    <!-- Portfolio Item 4-->
-                    <div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
-                        <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal4">
-                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio/game.png" alt="" />
-                        </div>
-                    </div>
-                    <!-- Portfolio Item 5-->
-                    <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
-                        <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal5">
-                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio/safe.png" alt="" />
-                        </div>
-                    </div>
-                    <!-- Portfolio Item 6-->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal6">
-                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio/submarine.png" alt="" />
-                        </div>
+                    <div class="col-lg-6" style="padding-top:80px">
+                        <canvas id="polar1"></canvas>
                     </div>
                 </div>
             </div>
         </section>
         <!-- About Section-->
-        <section class="page-section bg-primary text-white mb-0" id="about">
+        <section class="page-section" id="about">
             <div class="container">
                 <!-- About Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+                <h2 class="page-section-heading text-center text-uppercase">Event Detection</h2>
                 <!-- Icon Divider-->
-                <div class="divider-custom divider-light">
+                <div class="divider-custom">
                     <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-icon"><i class="fas fa-globe"></i></div>
                     <div class="divider-custom-line"></div>
                 </div>
                 <!-- About Section Content-->
                 <div class="row">
-                    <div class="col-lg-4 ml-auto"><p class="lead">Freelancer is a free bootstrap theme created by Start Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p></div>
-                    <div class="col-lg-4 mr-auto"><p class="lead">You can create your own custom avatar for the masthead, change the icon in the dividers, and add your email address to the contact form to make it fully functional!</p></div>
+                    <div class="col-lg-12 "><p class="lead" style="text-align: justify">In the second section, we present the plotted amount tweets and their 10 emotions on a day to day basis. This could be useful in identifying daily events, since an unusual burstiness in tweet count or a drastic and unusual change in a specific emotion could have been triggered by an important event related to climate change.</p></div>
                 </div>
-                <!-- About Section Button-->
-                <div class="text-center mt-4">
-                    <a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/themes/freelancer/"><i class="fas fa-download mr-2"></i>Free Download!</a>
+            </div>
+        </section>
+        <section style="margin-top:40px">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div>
+                            <canvas id="line12"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div>
+                            <canvas id="line2"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -140,78 +266,263 @@
         <section class="page-section" id="contact">
             <div class="container">
                 <!-- Contact Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Contact Me</h2>
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">User Profiling</h2>
                 <!-- Icon Divider-->
                 <div class="divider-custom">
                     <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-icon"><i class="fas fa-globe"></i></div>
                     <div class="divider-custom-line"></div>
                 </div>
-                <!-- Contact Section Form-->
                 <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
-                        <form id="contactForm" name="sentMessage" novalidate="novalidate">
-                            <div class="control-group">
-                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                    <label>Name</label><input class="form-control" id="name" type="text" placeholder="Name" required="required" data-validation-required-message="Please enter your name." />
-                                    <p class="help-block text-danger"></p>
-                                </div>
+                    <div class="col-lg-12 ">
+                        <p class="lead" style="text-align: justify">The truthfulness of human-caused Climate Change is practically undeniable, since the scientific consensus is around 97% regarding the issue, nevertheless, a significant portion of non-scientists, civilians and politicians alike, express doubts or outright denial against Global Warming. Our proposed model learns from the textual patterns of twitter users and tries to identify their opinions around the issue of climate change denialism.</p>
+                    </div>
+                </div>
+
+
+                <!-- Contact Section Form-->
+            </div>
+        </section>
+        <section>
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div id="anychart-embed-NqAPYRCG4" class="anychart-embed anychart-embed-NqAPYRCG">
+                            <div id="ac_style_NqAPYRCG4" style="display:none;">
+                                html, body, #container5 {
+                                    width: 100%;
+                                    height: 100%;
+                                    margin: 0;
+                                    padding: 0;
+                                }
                             </div>
-                            <div class="control-group">
-                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                    <label>Email Address</label><input class="form-control" id="email" type="email" placeholder="Email Address" required="required" data-validation-required-message="Please enter your email address." />
-                                    <p class="help-block text-danger"></p>
-                                </div>
+                            <script>(function(){
+                                function ac_add_to_head(el){
+                                    var head = document.getElementsByTagName('head')[0];
+                                    head.insertBefore(el,head.firstChild);
+                                }
+                                function ac_add_link(url){
+                                    var el = document.createElement('link');
+                                    el.rel='stylesheet';el.type='text/css';el.media='all';el.href=url;
+                                    ac_add_to_head(el);
+                                }
+                                function ac_add_style(css){
+                                    var ac_style = document.createElement('style');
+                                    if (ac_style.styleSheet) ac_style.styleSheet.cssText = css;
+                                    else ac_style.appendChild(document.createTextNode(css));
+                                    ac_add_to_head(ac_style);
+                                }
+
+                                ac_add_style(document.getElementById("ac_style_NqAPYRCG").innerHTML);
+                                ac_add_style(".anychart-embed-NqAPYRCG{width:600px;height:450px;}");
+                                })();
+                            </script>
+                            <div id="container5" style="width: 100%; height:100%"></div>
+                            <script>
+                                anychart.onDocumentReady(function () {
+
+                                    data = {{ data.believers_words|tojson }}
+
+                                  // create a tag cloud chart
+                                  var chart = anychart.tagCloud(data);
+                                    var customColorScale = anychart.scales.linearColor();
+                                    customColorScale.colors(["#ffcc00", "#00ccff"]);
+
+                                    chart.colorScale(customColorScale);
+                                    chart.colorRange().enabled(true);
+                                  // set the chart title
+                                  chart.title('Most frequent words of non-denier users')
+                                  // set array of angles, by which words will be placed
+                                  chart.angles([0])
+                                  chart.animation
+
+                                  // display chart
+                                  chart.container("container5");
+                                  chart.mode("spiral");
+                                  chart.draw();
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div id="anychart-embed-NqAPYRCG5" class="anychart-embed anychart-embed-NqAPYRCG">
+                            <div id="ac_style_NqAPYRCG5" style="display:none;">
+                                html, body, #container6 {
+                                    width: 100%;
+                                    height: 100%;
+                                    margin: 0;
+                                    padding: 0;
+                                }
                             </div>
-                            <div class="control-group">
-                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                    <label>Phone Number</label><input class="form-control" id="phone" type="tel" placeholder="Phone Number" required="required" data-validation-required-message="Please enter your phone number." />
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                    <label>Message</label><textarea class="form-control" id="message" rows="5" placeholder="Message" required="required" data-validation-required-message="Please enter a message."></textarea>
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                            </div>
-                            <br />
-                            <div id="success"></div>
-                            <div class="form-group"><button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Send</button></div>
-                        </form>
+                            <script>(function(){
+                                function ac_add_to_head(el){
+                                    var head = document.getElementsByTagName('head')[0];
+                                    head.insertBefore(el,head.firstChild);
+                                }
+                                function ac_add_link(url){
+                                    var el = document.createElement('link');
+                                    el.rel='stylesheet';el.type='text/css';el.media='all';el.href=url;
+                                    ac_add_to_head(el);
+                                }
+                                function ac_add_style(css){
+                                    var ac_style = document.createElement('style');
+                                    if (ac_style.styleSheet) ac_style.styleSheet.cssText = css;
+                                    else ac_style.appendChild(document.createTextNode(css));
+                                    ac_add_to_head(ac_style);
+                                }
+
+                                ac_add_style(document.getElementById("ac_style_NqAPYRCG").innerHTML);
+                                ac_add_style(".anychart-embed-NqAPYRCG{width:600px;height:450px;}");
+                                })();
+                            </script>
+                            <div id="container6" style="width: 100%; height:100%"></div>
+                            <script>
+                                anychart.onDocumentReady(function () {
+
+                                    data = {{ data.deniers_words|tojson }}
+
+                                  // create a tag cloud chart
+                                  var chart = anychart.tagCloud(data);
+
+                                    var customColorScale = anychart.scales.linearColor();
+                                    customColorScale.colors(["#ffcc00", "#00ccff"]);
+
+                                    chart.colorScale(customColorScale);
+                                    chart.colorRange().enabled(true);
+
+                                  // set the chart title
+                                  chart.title('Most frequent words of denier users')
+                                  // set array of angles, by which words will be placed
+                                  chart.angles([0])
+                                  chart.animation
+
+                                  // display chart
+                                  chart.container("container6");
+                                  chart.mode("spiral");
+                                  chart.draw();
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 60px;margin-bottom: 60px">
+                    <div class="col-lg-12 ">
+                        <p class="lead" style="text-align: justify">The overlapping Emotion Radar chart compares the average emotional response of each predicted class, as well as a similar bar chart for Sentiment and Subjectivity and a word cloud by class in order to detect common to all or class-specific words.</p>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 60px;margin-bottom: 60px">
+                    <div class="col-lg-12 ">
+                        <div>
+                            <canvas id="radar1"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-        <section id="newone">
+        <section class="page-section" id="newone">
+            <div class="container">
+                <!-- About Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase">User Interest Extraction</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-globe"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+                <div class="row">
+                    <div class="col-lg-12 "><p class="lead" style="text-align: justify"><p>In the final section, we present a word cloud related to the extracted interests of Instagram users where we can observe the most common and popular interests.</p></div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <divid="anychart-embed-NqAPYRCG2" class="col-lg-12 anychart-embed anychart-embed-NqAPYRCG">
+                        <div id="ac_style_NqAPYRCG2" style="display:none;">
+                            html, body, #container3 {
+                                width: 100%;
+                                height: 100%;
+                                margin: 0;
+                                padding: 0;
+                            }
+                        </div>
+                        <script>(function(){
+                            function ac_add_to_head(el){
+                                var head = document.getElementsByTagName('head')[0];
+                                head.insertBefore(el,head.firstChild);
+                            }
+                            function ac_add_link(url){
+                                var el = document.createElement('link');
+                                el.rel='stylesheet';el.type='text/css';el.media='all';el.href=url;
+                                ac_add_to_head(el);
+                            }
+                            function ac_add_style(css){
+                                var ac_style = document.createElement('style');
+                                if (ac_style.styleSheet) ac_style.styleSheet.cssText = css;
+                                else ac_style.appendChild(document.createTextNode(css));
+                                ac_add_to_head(ac_style);
+                            }
 
+                            ac_add_style(document.getElementById("ac_style_NqAPYRCG").innerHTML);
+                            ac_add_style(".anychart-embed-NqAPYRCG{width:600px;height:450px;}");
+                            })();
+                        </script>
+                        <div id="container3" style="width: 100%; height:100%"></div>
+                        <script>
+                            anychart.onDocumentReady(function () {
+
+                                data = {{ data.instagram|tojson }}
+
+                              // create a tag cloud chart
+                              var chart = anychart.tagCloud(data);
+
+                              // set the chart title
+                              chart.title('Instagram user interests')
+                              // set array of angles, by which words will be placed
+                              chart.angles([0])
+                              chart.animation
+
+                              // display chart
+                              chart.container("container3");
+                              chart.mode("spiral");
+                              chart.draw();
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
         </section>
         <!-- Footer-->
         <footer class="footer text-center">
             <div class="container">
                 <div class="row">
                     <!-- Footer Location-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">Location</h4>
-                        <p class="lead mb-0">2215 John Daniel Drive<br />Clark, MO 65243</p>
+                    <div class="col-lg-12">
+                        <h4 class="text-uppercase mb-4">Our Team</h4>
+                        <p class="lead mb-0">Passali Tatiana</p>
+                        <p class="lead mb-0">Papadopoulos Stefanos</p>
+                        <p class="lead mb-0">Frangidis Paschalis</p>
+                        <p></p>
+                        <p class="lead mb-0">MSc DWS, AUTh</p>
                     </div>
-                    <!-- Footer Social Icons-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">Around the Web</h4>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-facebook-f"></i></a><a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-twitter"></i></a><a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-linkedin-in"></i></a><a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-dribbble"></i></a>
-                    </div>
-                    <!-- Footer About Text-->
-                    <div class="col-lg-4">
-                        <h4 class="text-uppercase mb-4">About Freelancer</h4>
-                        <p class="lead mb-0">Freelance is a free to use, MIT licensed Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.</p>
-                    </div>
+<!--                    &lt;!&ndash; Footer Social Icons&ndash;&gt;-->
+<!--                    <div class="col-lg-4 mb-5 mb-lg-0">-->
+<!--                        <h4 class="text-uppercase mb-4">Around the Web</h4>-->
+<!--                        <a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-facebook-f"></i></a><a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-twitter"></i></a><a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-linkedin-in"></i></a><a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-dribbble"></i></a>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; Footer About Text&ndash;&gt;-->
+<!--                    <div class="col-lg-4">-->
+<!--                        <h4 class="text-uppercase mb-4">About Freelancer</h4>-->
+<!--                        <p class="lead mb-0">Freelance is a free to use, MIT licensed Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.</p>-->
+<!--                    </div>-->
                 </div>
             </div>
         </footer>
         <!-- Copyright Section-->
         <section class="copyright py-4 text-center text-white">
-            <div class="container"><small>Copyright © Your Website 2020</small></div>
+            <div class="container"><small>Web Mining Project</small></div>
         </section>
         <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
         <div class="scroll-to-top d-lg-none position-fixed">
@@ -391,6 +702,272 @@
                 </div>
             </div>
         </div>
+        <script>
+            tweets_per_day =  {{ data.tweets_per_day|tojson }}
+            var ctx = document.getElementById('line12').getContext('2d');
+            var myRadarChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["2020-03-07","2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","Break","2020-05-05","2020-05-06","2020-05-07","2020-05-08","2020-05-09","2020-05-10","2020-05-11","2020-05-12","2020-05-13"],
+                    datasets: [{
+                        label: '# of Tweets',
+                        data: tweets_per_day, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: 'rgba(35,227,255,0.5)',
+                        borderColor: 'rgba(35,227,255,0.8)',
+
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: false
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            anger_s = {{ data.anger_s|tojson }}
+            anticipation_s = {{ data.anticipation_s|tojson }}
+            disgust_s  = {{ data.disgust_s|tojson }}
+            fear_s  = {{ data.fear_s|tojson }}
+            joy_s  = {{ data.joy_s|tojson }}
+            negative_s  = {{ data.negative_s|tojson }}
+            positive_s  = {{ data.positive_s|tojson }}
+            sadness_s  = {{ data.sadness_s|tojson }}
+            surprise_s = {{ data.surprise_s|tojson }}
+            trust_s = {{ data.trust_s|tojson }}
+            var ctx = document.getElementById('line2').getContext('2d');
+            var myRadarChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["2020-03-07","2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","Break","2020-05-05","2020-05-06","2020-05-07","2020-05-08","2020-05-09","2020-05-10","2020-05-11","2020-05-12","2020-05-13"],
+                    datasets: [{
+                        label: 'Anger',
+                        data: anger_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Anticipation',
+                        data: anticipation_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Disgust',
+                        data: disgust_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(238,115,51,0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(238,115,51,1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Fear',
+                        data: fear_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(239,236,5,0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(239,236,5,1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Joy',
+                        data: joy_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(35,227,255,0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(35,227,255,1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Negative',
+                        data: negative_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(236,0,156,0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(236,0,156,1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Positive',
+                        data: positive_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(111,199,146,0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(111,199,146,1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Sadness',
+                        data: sadness_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(232,0,20,0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(232,0,20,1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Surprise',
+                        data: surprise_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(74,0,227,0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(74,0,227,1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Trust',
+                        data: trust_s, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(10,68,95,0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(10,68,95,1)',
+                        ],
+                        borderWidth: 1
+                    },]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: false
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            average_emotions = {{ data.average_emotions|tojson }}
+            var ctx = document.getElementById('polar1').getContext('2d');
+            var myRadarChart = new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Anger', 'Anticipation', 'Disgust', 'Fear', 'Joy', 'Negative', 'Positive', 'Sadness', 'Surprise', 'Trust'], //['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        data: average_emotions, //[12, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(238,115,51,0.5)',
+                            'rgba(239,236,5,0.5)',
+                            'rgba(35,227,255,0.5)',
+                            'rgba(236,0,156,0.5)',
+                            'rgba(111,199,146,0.5)',
+                            'rgba(232,0,20,0.5)',
+                            'rgba(74,0,227,0.5)',
+                            'rgba(10,68,95,0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(238,115,51,0.7)',
+                            'rgba(239,236,5,0.7)',
+                            'rgba(35,227,255,0.7)',
+                            'rgba(236,0,156,0.7)',
+                            'rgba(111,199,146,0.7)',
+                            'rgba(232,0,20,0.7)',
+                            'rgba(74,0,227,0.7)',
+                            'rgba(10,68,95,0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            believers = {{ data.believers|tojson }}
+            uncertains = {{ data.uncertains|tojson }}
+            deniers  = {{ data.deniers|tojson }}
+            var ctx = document.getElementById('radar1').getContext('2d');
+            var myRadarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['anger','anticipation','disgust','joy','sadness','surprise','trust'],//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: 'Deniers', //'# of Votes',
+                        data: deniers, //[12, 19, 3, 5, 2, 3],
+                        backgroundColor: 'rgba(238,115,51,0.5)',
+                        borderWidth: 1
+                        },
+                        {
+                        label: 'Uncertain', //'# of Votes',
+                        data: uncertains, //[12, 19, 3, 5, 2, 3],
+                        backgroundColor: 'rgba(200,200,200,0.5)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Non-Deniers', //'# of Votes',
+                        data: believers, //[12, 19, 3, 5, 2, 3],
+                        backgroundColor: 'rgba(12,97,154,0.5)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>

@@ -20,6 +20,7 @@ class InstaMiner(object):
         # loader.login(insta_username, insta_password)
         self.connection = MongoHandler()
 
+    # Retrieve new posts from Instagram
     def get_new_posts(self):
 
         for post in self.loader.get_hashtag_posts('climatechange'):
@@ -67,6 +68,7 @@ class InstaMiner(object):
 
             self.connection.store_to_collection(new_post, "instagram")
 
+    # Preprocesses instagram posts
     def preprocess_posts(self):
         posts = self.connection.retrieve_from_collection("instagram")
 

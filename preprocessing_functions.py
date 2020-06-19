@@ -3,6 +3,7 @@ from nltk import TweetTokenizer, WordNetLemmatizer, pos_tag
 from nltk.corpus import wordnet
 from lexicons import contractions, punctuations, en_stopwords
 
+# Preprocesses text from tweeter
 def preprocess_text(tweet_text):
     tweet_tokenizer = TweetTokenizer()
 
@@ -37,6 +38,7 @@ def nltk_tag_to_wordnet_tag(nltk_tag):
     else:
         return None
 
+#
 def get_hashtags(text):
     tweet_tokenizer = TweetTokenizer()
     return [token for token in tweet_tokenizer.tokenize(text) if re.match("^#(\w+)", token)]
