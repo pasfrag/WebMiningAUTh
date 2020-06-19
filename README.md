@@ -8,7 +8,7 @@ In our work, we focus on the topic of Climate Change and for this purpose, we co
 <li>User Interests Extraction</li>
 <li>Like Prediction</li>
 <li>Visualization of the derived results</li>
- <li>Web Application using Flask and Javascript for the exploration of the results</li>
+ <li>Web Application using Flask and Javascript for the visual exploration of the results</li>
 </ul>
 <br />
 
