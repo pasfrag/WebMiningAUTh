@@ -412,9 +412,14 @@
                     </div>
                 </div>
                 <div class="row" style="margin-top: 60px;margin-bottom: 60px">
-                    <div class="col-lg-12 ">
+                    <div class="col-lg-6 ">
                         <div>
                             <canvas id="radar1"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 ">
+                        <div>
+                            <canvas id="bar1"></canvas>
                         </div>
                     </div>
                 </div>
@@ -961,6 +966,70 @@
                         yAxes: [{
                             ticks: {
                                 beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            be_scores =  {{ data.believers_scores|tojson }}
+            uncertains_scores = {{ data.uncertains_scores|tojson }}
+            deniers_scores = {{ data.deniers_scores|tojson }}
+            var ctx = document.getElementById('bar1').getContext('2d');
+            var myRadarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['sentinment', 'subjectivity'],
+                    datasets: [{
+                        label: ['Non-Deniers'],
+                        data: be_scores, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(12,97,154,0.5)',
+                            'rgba(12,97,154,0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(12,97,154,0.8)',
+                            'rgba(12,97,154,0.8)'
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: ['Uncertain'],
+                        data: uncertains_scores, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(200,200,200,0.5)',
+                            'rgba(200,200,200,0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(200,200,200,0.8)',
+                            'rgba(200,200,200,0.8)'
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: ['Deniers'],
+                        data: deniers_scores, // [12, 19, null, 3, 5, 2, 3],
+                        fill: false,
+                        backgroundColor: [
+                            'rgba(238,115,51,0.5)',
+                            'rgba(238,115,51,0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(175,67,6,0.8)',
+                            'rgba(175,67,6,0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: false
                             }
                         }]
                     }
