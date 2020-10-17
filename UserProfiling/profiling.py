@@ -3,18 +3,16 @@ import json
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import metrics, model_selection, svm
+from sklearn import metrics, model_selection
 from sklearn.linear_model import LogisticRegression
-from mongo import MongoHandler
+from DataCollection.mongo import MongoHandler
 from secret_keys import insta_username, insta_password
 import pickle
-import lexicons
+from DataCollection import lexicons
 from nltk.corpus import words
 from collections import Counter
 from geotext import GeoText
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.naive_bayes import MultinomialNB
+
 # from visualization import word_cloud
 
 
@@ -31,10 +29,10 @@ def predict_denier_profiles():
     # svm_load = pickle.load(open('final_models/final_svm.pickle', 'rb'))  # unused SVM model
 
     # loading the trained Logistic Regression model
-    LR = pickle.load(open('final_models/final_LR.pickle', 'rb'))
+    LR = pickle.load(open('../final_models/final_LR.pickle', 'rb'))
 
     # loading the pre-trained Tf-Idf Lexicon
-    tfidf_load = pickle.load(open('final_models/final_tfidf.pickle', 'rb'))
+    tfidf_load = pickle.load(open('../final_models/final_tfidf.pickle', 'rb'))
 
     # Loading new, previously unseen twitter profiles
     new_profiles = mongo_connect.retrieve_from_collection("twitter_profiles_1K")
@@ -110,7 +108,7 @@ def predict_denier_profiles():
 
 # gets the unique users from our initial twitter dataset and filters out the users used for the ML training
 def get_user_names():
-    df = pd.read_csv('data/user_names.csv')
+    df = pd.read_csv('../data/user_names.csv')
     # print (pd.DataFrame(users.values.tolist()).stack().value_counts())
     users = df.groupby('user_screen_name').agg(['nunique']).reset_index(drop=False)
     users = users.sample(frac=1, random_state=1)
@@ -199,14 +197,14 @@ def train_profiling_model():
     # retrains the ML model on the whole dataset and finalises it
     def export_final_model():
         tfidf.fit(text)
-        pickle.dump(tfidf, open("final_models/final_tfidf.pickle", "wb"))
+        pickle.dump(tfidf, open("../final_models/final_tfidf.pickle", "wb"))
         text_tf = tfidf.transform(text)
         x = pd.DataFrame(text_tf.todense())
         model = LogisticRegression(random_state=0, solver='lbfgs')
         # model = svm.SVC(gamma=0.2, max_iter=1000)
 
         model.fit(x, y)
-        pickle.dump(model, open('final_models/final_LR.pickle', 'wb'))
+        pickle.dump(model, open('../final_models/final_LR.pickle', 'wb'))
         # pickle.dump(model2, open('final_models/final_svm.pickle', 'wb'))
 
     test_model()
@@ -274,7 +272,7 @@ def insta_profiles():
         sleep=True)
     L.login(insta_username, insta_password)
 
-    df = pd.read_csv('data/insta_users.csv')
+    df = pd.read_csv('../data/insta_users.csv')
     user_id = df.groupby('user_id').agg(['nunique']).reset_index(drop=False)
     user_id = user_id['user_id']
 
@@ -321,7 +319,7 @@ def user_interests():
     dct = dict()
     dct['hashtags'] = all_tags
     # total_count = Counter(all_tags)
-    with open('ig_interests.json', 'w') as f:
+    with open('../ig_interests.json', 'w') as f:
         json.dump(dct, f)
     # word_cloud(all_tags)
     # print(total_count.most_common(20))

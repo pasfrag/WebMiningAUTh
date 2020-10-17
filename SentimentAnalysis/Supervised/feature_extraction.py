@@ -1,8 +1,7 @@
-from SentimentAnalysis.Supervised.feature_extraction_helpers import find_number_of_emojis, extract_emojis_semantic, tfidf, cv
-from lexicons import joy_emojis, anger_emojis, sad_emojis, surprise_emojis, fear_emojis, disgust_emojis
-from preprocessing_functions import preprocess_text
+from SentimentAnalysis.Supervised.feature_extraction_helpers import find_number_of_emojis, extract_emojis_semantic, cv
+from DataCollection.lexicons import joy_emojis, anger_emojis, sad_emojis, surprise_emojis, fear_emojis, disgust_emojis
+from DataCollection.preprocessing_functions import preprocess_text
 import pandas as pd
-import numpy as np
 
 
 def preprocces_dataframe(df):

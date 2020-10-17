@@ -1,18 +1,13 @@
 import pandas as pd
-import numpy as np
-from sklearn import model_selection, metrics, tree, linear_model, naive_bayes, linear_model
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn import model_selection, metrics, tree
+from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
-from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import NearMiss
-from sklearn.svm import LinearSVC
-from profiling import k_fold_cv
+from UserProfiling.profiling import k_fold_cv
 
-from mongo import MongoHandler
+from DataCollection.mongo import MongoHandler
 import seaborn as sns
-from sklearn.feature_extraction.text import CountVectorizer
+
 
 # function for black box model interpretability with the method of feature importance
 def tree_feature_importance(tree_model,columns, x):

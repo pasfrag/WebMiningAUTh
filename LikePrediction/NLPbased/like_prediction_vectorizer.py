@@ -3,7 +3,7 @@ from keras.preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
 from SentimentAnalysis.Supervised.feature_extraction_helpers import cv, tfidf
 import pandas as pd
-from mongo import MongoHandler
+from DataCollection.mongo import MongoHandler
 import numpy as np
 
 # Define vocabulary size

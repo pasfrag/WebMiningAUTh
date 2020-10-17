@@ -1,7 +1,7 @@
 import re
 from nltk import TweetTokenizer, WordNetLemmatizer, pos_tag
 from nltk.corpus import wordnet
-from lexicons import contractions, punctuations, en_stopwords
+from DataCollection.lexicons import contractions, punctuations, en_stopwords
 
 # Preprocesses text from tweeter
 def preprocess_text(tweet_text):

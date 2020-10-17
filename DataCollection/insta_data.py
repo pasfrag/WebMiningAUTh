@@ -1,10 +1,9 @@
 import json
 import datetime
-from secret_keys import insta_username, insta_password
 from instaloader import Instaloader
-from mongo import MongoHandler
+from DataCollection.mongo import MongoHandler
 from langdetect import detect
-from preprocessing_functions import preprocess_text, get_hashtags, get_mentions
+from DataCollection.preprocessing_functions import preprocess_text, get_hashtags, get_mentions
 
 
 class InstaMiner(object):

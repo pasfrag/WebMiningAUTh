@@ -1,15 +1,11 @@
 from SentimentAnalysis.Supervised.feature_extraction import vectorize_test_dataframe, vectorize_train_dataframe, \
     preprocces_dataframe, preprocces_mongo_tweets_and_posts
 import pandas as pd
-from skmultilearn.problem_transform import BinaryRelevance, LabelPowerset, ClassifierChain
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn.naive_bayes import MultinomialNB, GaussianNB
-from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, hamming_loss
-from mongo import MongoHandler
-import matplotlib.pyplot as plt
+from DataCollection.mongo import MongoHandler
+
 # Connect to mongo to retrieve tweets and insta post
 mongo_connect = MongoHandler()
 # tweets = mongo_connect.retrieve_from_collection("twitter")  # Retrieve tweets from collection

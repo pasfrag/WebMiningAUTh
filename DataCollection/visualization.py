@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-
-from mongo import MongoHandler
+from DataCollection.mongo import MongoHandler
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -31,7 +30,7 @@ def word_cloud(df):
     from wordcloud import WordCloud
     from PIL import Image
 
-    char_mask = np.array(Image.open("data/instagram.png"))
+    char_mask = np.array(Image.open("../data/instagram.png"))
     image_colors = wordcloud.ImageColorGenerator(char_mask)
 
     wc0 = WordCloud(background_color="white", max_words=200, width=400, height=400, mask=char_mask, random_state=1)\

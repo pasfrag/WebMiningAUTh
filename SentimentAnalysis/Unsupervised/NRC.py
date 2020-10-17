@@ -1,9 +1,10 @@
 import os
 
 import pandas as pd
-from mongo import MongoHandler
+from DataCollection.mongo import MongoHandler
 
 # connection = MongoHandler()
+# Emotion analysis with the use of NRC lexicon
 
 # Given a list of words, returns 8 emotions and positive, negative scores with NRC
 def get_emotions(words_list):

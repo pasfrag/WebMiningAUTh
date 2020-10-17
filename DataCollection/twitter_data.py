@@ -1,23 +1,21 @@
 import datetime
 import time
 import re
-
 import langdetect
 import pymongo
 import tweepy
 
-import lexicons
-import pandas as pd
+from DataCollection import lexicons
 from tweepy import API, OAuthHandler, Cursor, TweepError
-from mongo import MongoHandler
-from preprocessing_functions import preprocess_text
+from DataCollection.mongo import MongoHandler
+from DataCollection.preprocessing_functions import preprocess_text
 from secret_keys import consumer_key, consumer_secret, access_token, access_token_secret
-import textblob
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from langdetect import detect
 from SentimentAnalysis.Unsupervised.NRC import get_emotions
-import profiling
+from UserProfiling import profiling
+
 
 # Vader sentiment analysis
 def sentiment_analyzer_scores(sentence):
